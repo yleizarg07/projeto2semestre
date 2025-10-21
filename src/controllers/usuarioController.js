@@ -23,8 +23,8 @@ function listarUsuarios(req, res) {
 
 function criarUsuario(req, res) {
     try {
-        const { nome, sobrenome, email, nomeUsuario, senha} = req.body;
-        usuarioModel.criar(nome, sobrenome, email, nomeUsuario, senha);
+        const { nome, email, nomeUsuario, senha} = req.body;
+        usuarioModel.criar(nome, email, nomeUsuario, senha);
        // res.redirect('/algo');
     }
     catch (error) {
@@ -38,9 +38,9 @@ function criarUsuario(req, res) {
 function atualizarUsuario(req, res) {
   try {
     const { id } = req.params;
-    const {  nome, sobrenome, nomeUsuario, senha } = req.body;
+    const {  nome, nomeUsuario, senha } = req.body;
 
-    const usuarioAtualizado = usuarioModel.atualizar(parseInt(id), nome, turma, email);
+    const usuarioAtualizado = usuarioModel.atualizar(parseInt(id), nome, nomeUsuario, senha);
     if (!usuarioAtualizado) {
       const usuarios = usuarioModel.listar();
       return res.render('pages/algo', { 
