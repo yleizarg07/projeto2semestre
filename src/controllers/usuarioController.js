@@ -1,5 +1,6 @@
 const path = require('path');
-const audiovisualModel = require('../models/usuarioModel');
+const postModel = require('../models/usuarioModel');
+const bcrypt = require('bcryptjs');
 
 function listarUsuarios(req, res) {
   try {
@@ -22,17 +23,42 @@ function listarUsuarios(req, res) {
 }
 
 function criarUsuario(req, res) {
-    try {
-        const { nome, email, nomeUsuario, senha} = req.body;
-        usuarioModel.criar(nome, email, nomeUsuario, senha);
-       // res.redirect('/algo');
+  try {
+    const { nome, email, nomeUsuario, senha } = req.body;
+    const hashedSenha = bcrypt.hashSync(senha, 10); 
+    usuarioModel.criar(nome, email, nomeUsuario, hashedSenha);
+    // res.redirect('/algo');
+  } catch (error) {
+    const usuarios = usuarioModel.listar();
+    res.render('pages/algo', {
+      usuarios,
+      error: 'Erro ao criar usuário: ' + error.message  
+    });
+  }
+}
+
+function login(req, res) {
+  try {
+    const { email, senha } = req.body;
+    // busca usuário pelo e-mail
+    const usuario = usuarioModel.buscarPorEmail(email);
+    if (!usuario) {
+      return res.render('pages/login', { error: 'Usuário não encontrado' });
     }
-    catch (error) {
-        const usuarios = usuarioModel.listar()
-        res.render('pages/algo', {
-        usuarios,
-    error:'Erro ao criar usuário: ' + error.message  });
+
+    // compara a senha fornecida com o hash armazenado
+    const senhaValida = bcrypt.compareSync(senha, usuario.senha);
+    if (!senhaValida) {
+      return res.render('pages/login', { error: 'Senha incorreta' });
     }
+
+    req.session.usuarioId = usuario.id; 
+    res.redirect('/algo');//redirecionar para a pagina do usuario se ela existir
+  } catch (error) {
+    res.render('pages/login', { 
+      error: 'Erro ao fazer login: ' + error.message 
+    });
+  }
 }
 
 function atualizarUsuario(req, res) {
@@ -69,12 +95,12 @@ function removerUsuario(req, res) {
         error: 'Usuário não encontrado' 
       });
     }
-    // Desvincula o usuário das audiovisual
-    const audiovisualModel = require('../models/audiovisualModel');
-    const audiovisual = audiovisualModel.listar();
-    audiovisual.forEach(audiovisual => {
-      if (audiovisual.userId === parseInt(id)) {
-        delete audiovisual.userId;
+    // apaga as postagens do usuario
+    const postModel = require('../models/postModel');
+    const post = postModel.listar();
+    post.forEach(post => {
+      if (post.userId === parseInt(id)) {
+        postModel.remover(post.id);
       }
     });
     res.redirect('/algo');
