@@ -15,7 +15,7 @@ function criarComentario(resposta, usuario_id, post_id) {
     return novoComentario;
 }
 
-function alterarComentario(senha, com_id, novosDados) {
+function atualizarComentario(senha, com_id, novosDados) {
     const usuario = users.find(u => u.senha === senha);
     if (!usuario) {
         throw new Error('Usuário não encontrado');
@@ -46,6 +46,6 @@ function excluirComentario(senha, com_id) {
 
 module.exports = {
     criarComentario,
-    alterarComentario,
+    atualizarComentario,
     excluirComentario
 };
