@@ -12,7 +12,7 @@ function listarPostagens(req, res) {
             const postagem = postModel.buscarPorId(parseInt(id));
             if (!postagem) {
                 //caso for uma busca por ID e não encontrar
-                return res.render('pages/algo', { error: 'Postagem não encontrada', postagens: [] });
+                return res.render('pages/index', { error: 'Postagem não encontrada', postagens: [] });
             }
             postagens = [postagem];
         } else {
@@ -123,10 +123,6 @@ function excluirPostagem(req, res) {
         postModel.remover(parseInt(id));
         
         return res.redirect(`/algo?usuarioId=${usuarioId}`);
-    } catch (error) {
-        res.render('pages/algo', {
-            error: 'Erro ao excluir postagem: ' + error.message
-        });
     }
 }
 
@@ -135,10 +131,10 @@ function excluirPostagem(req, res) {
 function pagina(req, res) {
     try {
         const postagens = postModel.listar(); 
-        
-        res.render('pages/algo', { postagens });
+
+        res.render('pages/index', { postagens });
     } catch (error) {
-        res.render('pages/algo', {
+        res.render('pages/index', {
             postagens: [],
             error: 'Erro ao carregar postagens: ' + error.message
         });

@@ -30,7 +30,6 @@ app.use('/comentarios', comentarioRoute);
 //Rotas de postagens
 const postRoute = require('./routes/postRoutes');
 app.use('/posts', postRoute);
-app.use('/posts', postRoute);
 
 //Rotas de usuários
 const usuarioRoute = require('./routes/usuarioRoutes');
