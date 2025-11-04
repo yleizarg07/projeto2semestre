@@ -1,6 +1,7 @@
 const comentarioModel = require('../models/comentarioModel');
 const postModel = require('../models/postModel');
 const usuarioModel = require('../models/usuarioModel');
+const bcrypt = require('bcrypt');
 
 function listarComentarios(req, res) {
   try {
