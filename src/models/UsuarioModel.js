@@ -5,6 +5,7 @@ let users = [
 ];
 
  //Funções geradas pelo vs code(vou fazer ajustes depois)
+//cadastrar o usuario
 function cadastrarUsuario(nome, nome_usuario, email, senha) {
     const novoUsuario = {
         usuario_id: users.length + 1,
@@ -18,6 +19,21 @@ function cadastrarUsuario(nome, nome_usuario, email, senha) {
     return novoUsuario;
 }
 
+//listar todos os ususraios
+function listar(){}
+
+//buscar um usuariop por id
+function buscarPorId(){}
+
+//buscar o usuario por nome do usuario
+function buscarPorNomeUsuario(){}
+
+//criar a parte social do usuario, que é diferente do seu cadastro
+function socialUsuario(){}
+
+//atualizar a parte social do usuario
+function atualizarSocial() {}
+
 function editarUsuario(senha, novosDados) {
     const usuario = users.find(u => u.senha === senha);
     if (!usuario) {
@@ -27,8 +43,7 @@ function editarUsuario(senha, novosDados) {
     return usuario;
 }
 
-
-
+//exibir os dados do cadastro do usuario
 function exibirUsuario(senha) {
     const usuario = users.find(u => u.senha === senha);
     if (!usuario) {
@@ -48,6 +63,11 @@ function excluirUsuario(senha) {
 
 module.exports = {
     cadastrarUsuario,
+    listar,
+    buscarPorId,
+    buscarPorNomeUsuario,
+    socialUsuario,
+    atualizarSocial,
     editarUsuario,
     exibirUsuario,
     excluirUsuario
