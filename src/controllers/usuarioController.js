@@ -1,5 +1,5 @@
 const path = require('path');
-const postModel = require('../models/usuarioModel');
+const usuarioModel = require('../models/usuarioModel');
 const bcrypt = require('bcryptjs');
 
 function listarUsuarios(req, res) {
