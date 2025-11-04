@@ -15,6 +15,12 @@ function criarComentario(resposta, usuario_id, post_id) {
     return novoComentario;
 }
 
+//listar os comentarios de cada post (como no X)
+function listarComentarios(){}
+
+//se conseguir, juntar com o buscar do postModel
+function buscarPorNomeUsuario(){}
+
 function atualizarComentario(senha, com_id, novosDados) {
     const usuario = users.find(u => u.senha === senha);
     if (!usuario) {
