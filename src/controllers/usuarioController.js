@@ -113,6 +113,8 @@ function removerUsuario(req, res) {
   }
 }
 
+
+
 function pagina(req, res) {
   try {
     const usuarios = usuarioModel.listar();
