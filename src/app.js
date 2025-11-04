@@ -36,4 +36,5 @@ app.use('/posts', postRoute);
 const usuarioRoute = require('./routes/usuarioRoutes');
 app.use('/usuarios', usuarioRoute);
 
+
 module.exports = app;
