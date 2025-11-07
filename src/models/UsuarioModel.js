@@ -6,18 +6,30 @@ let users = [
 
  //Funções geradas pelo vs code(vou fazer ajustes depois)
 //cadastrar o usuario
-function cadastrarUsuario(nome, nome_usuario, email, senha) {
-    const novoUsuario = {
-        usuario_id: users.length + 1,
-        nome,
-        nome_usuario,
-        email,
-        senha,
-        quantiPosts: 0
-    };
-    users.push(novoUsuario);
-    return novoUsuario;
+const Usuario = require(".config./usuariodb"); // importa o modelo
+
+async function criarUsuario(nome, nome_usuario, senha, email) {
+    try {
+        const novoUsuario = await Usuario.create({
+            nome,
+            nome_usuario,
+            senha,
+            email
+            // quanti_post não precisa, tem default = 0
+        });
+
+        console.log("Usuário criado com sucesso:");
+        console.log(novoUsuario.toJSON());
+
+        return novoUsuario;
+    } catch (erro) {
+        console.error("Erro ao criar usuário:", erro);
+        throw erro;
+    }
 }
+
+module.exports = criarUsuario;
+
 
 //listar todos os ususraios
 function listar(){}
