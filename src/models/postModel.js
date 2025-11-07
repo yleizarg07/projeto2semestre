@@ -17,6 +17,7 @@ function criarPostagem(titulo, conteudo, categoria, usuario_id) {
     return novaPostagem;
 }
 
+//atualizar postagem
 function alterarPostagem(senha, post_id, novosDados) {
     const usuario = users.find(u => u.senha === senha);
     if (!usuario) {
@@ -43,6 +44,8 @@ function listarPostagensPorUsuario(senha) {
 function listarPostagensPorCategoria(categoria) {
     return posts.filter(p => p.categoria === categoria);
 }
+
+
 
 function deletarPostagem(senha, post_id) {
     const usuario = users.find(u => u.senha === senha);
