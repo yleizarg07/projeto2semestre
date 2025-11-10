@@ -1,0 +1,23 @@
+<%- include('../partials/head.ejs') %>
+<%- include('../partials/header') %>
+
+<h1>Postagens</h1>
+
+<% if (error) { %>
+  <p style="color:red;"><%= error %></p>
+<% } %>
+
+<ul>
+  <% postagens.forEach(post => { %>
+    <li>
+      <strong><%= post.categoria %></strong>: <%= post.conteudo %>
+      <form action="/posts/excluir/<%= post.id %>" method="POST">
+        <button type="submit">Excluir</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
+
+<a href="/posts/criar">Nova Postagem</a>
+
+<%- include('../partials/footer') %>

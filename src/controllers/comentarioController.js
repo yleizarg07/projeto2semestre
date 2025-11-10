@@ -57,7 +57,7 @@ function criarComentario(req, res) {
         return res.redirect(`/postagem/${postId}`); 
         
     } catch (error) {
-        res.render('pages/algo', {
+        res.render('pages/erro', {
             error: 'Erro ao criar comentário: ' + error.message
         });
     }
@@ -76,25 +76,25 @@ function atualizarComentario(req, res) {
         }
 
         if (!conteudo || conteudo.trim() === '') {
-            return res.render('pages/algo', { error: 'Conteúdo é obrigatório.' });
+            return res.render('pages/erro', { error: 'Conteúdo é obrigatório.' });
         }
 
         const comentario = comentarioModel.buscarPorId(parseInt(id));
         
         // verifica a permissão e a existencia
         if (!comentario || comentario.userId !== usuarioId) {
-            return res.render('pages/algo', { error: 'Comentário não encontrado ou você não tem permissão para editá-lo.' });
+            return res.render('pages/erro', { error: 'Comentário não encontrado ou você não tem permissão para editá-lo.' });
         }
         
         //validação da Senha
         const usuario = usuarioModel.buscarPorId(usuarioId);
         if (!usuario) {
-            return res.render('pages/algo', { error: 'Erro de sessão. Usuário não encontrado.' });
+            return res.render('pages/erro', { error: 'Erro de sessão. Usuário não encontrado.' });
         }
         
         const senhaValida = bcrypt.compareSync(senha, usuario.senha); 
         if (!senhaValida) {
-            return res.render('pages/algo', { error: 'Senha incorreta.' });
+            return res.render('pages/erro', { error: 'Senha incorreta.' });
         }
 
         // atualização 
@@ -105,7 +105,7 @@ function atualizarComentario(req, res) {
         return res.redirect(`/postagem/${postId}`); 
         
     } catch (error) {
-        res.render('pages/algo', {
+        res.render('pages/erro', {
             error: 'Erro ao atualizar comentário: ' + error.message
         });
     }
@@ -126,7 +126,7 @@ function excluirComentario(req, res) {
         
         // verifica a permissão e a existencia
         if (!comentario || comentario.userId !== usuarioId) {
-            return res.render('pages/algo', { error: 'Comentário não encontrado ou você não tem permissão para excluí-lo.' });
+            return res.render('pages/erro', { error: 'Comentário não encontrado ou você não tem permissão para excluí-lo.' });
         }
         
         const postId = comentario.postId; // salva o ID da postagem antes de remover
@@ -137,7 +137,7 @@ function excluirComentario(req, res) {
         return res.redirect(`/postagem/${postId}`); 
         
     } catch (error) {
-        res.render('pages/algo', {
+        res.render('pages/erro', {
             error: 'Erro ao excluir comentário: ' + error.message
         });
     }

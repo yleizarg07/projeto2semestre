@@ -23,8 +23,12 @@ app.use(session({
   cookie: { secure: true } 
 }));
 
+app.get('/', (req, res) => {
+    res.redirect('/posts');
+});
+
 //Rotas de comentários
-const comentarioRoute = require('./routes/comentarioRoute');
+const comentarioRoute = require('./routes/comentarioRoutes');
 app.use('/comentarios', comentarioRoute);
 
 //Rotas de postagens

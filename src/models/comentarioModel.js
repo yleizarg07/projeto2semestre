@@ -1,3 +1,5 @@
+const { listar } = require("./usuarioModel");
+
 //Banco de Dados provisório :D
 let comemments = [
     { com_id: 1, resposta: 'Nao curti essa coisa', usuario_id: 2, post_id: 1 },
@@ -51,6 +53,8 @@ function excluirComentario(senha, com_id) {
 }
 
 module.exports = {
+    listarComentarios,
+    buscarPorNomeUsuario,
     criarComentario,
     atualizarComentario,
     excluirComentario

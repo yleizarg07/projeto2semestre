@@ -1,0 +1,35 @@
+<%- include('../partials/header') %>
+
+<h1>Comentários</h1>
+
+<% if (error) { %>
+  <p style="color:red;"><%= error %></p>
+<% } %>
+
+<ul>
+  <% comentarios.forEach(comentario => { %>
+    <li>
+      <strong>ID:</strong> <%= comentario.id %><br>
+      <strong>Conteúdo:</strong> <%= comentario.conteudo %><br>
+      <form action="/comentario/<%= comentario.id %>/excluir" method="POST">
+        <button type="submit">Excluir</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
+
+<a href="/criarComentario">Novo comentário</a>
+
+<%- include('../partials/footer') %>
+
+/*<h2>Comentários</h2>
+
+<% if (error) { %>
+  <p><%= error %></p>
+<% } %>
+
+<ul>
+  <% comentarios.forEach(c => { %>
+    <li><%= c.conteudo %> (Post: <%= c.postId %>)</li>
+  <% }) %>
+</ul>*/

@@ -21,9 +21,9 @@ function listarPostagens(req, res) {
         }
 
         //retorna o resultado da busca
-        res.render('pages/algo', { postagens });
+        res.render('pages/index', { postagens });
     } catch (error) {
-        res.render('pages/algo', {
+        res.render('pages/erro', {
             postagens: [],
             error: 'Erro ao listar postagens: ' + error.message
         });
@@ -43,7 +43,7 @@ function criarPostagem(req, res) {
 
         if (!conteudo || conteudo.trim() === '') {
             //retorna um erro na página
-            return res.render('pages/algo', { error: 'Conteúdo da postagem é obrigatório.' });
+            return res.render('pages/erro', { error: 'Conteúdo da postagem é obrigatório.' });
         }
 
         //cria a postagem
@@ -54,7 +54,7 @@ function criarPostagem(req, res) {
         
     } catch (error) {
         //caso falhe
-        res.render('pages/algo', {
+        res.render('pages/erro', {
             error: 'Erro ao criar postagem: ' + error.message
         });
     }
@@ -73,23 +73,23 @@ function atualizarPostagem(req, res) {
         }
 
         if (!conteudo || conteudo.trim() === '') {
-            return res.render('pages/algo', { error: 'Conteúdo da postagem é obrigatório.' });
+            return res.render('pages/erro', { error: 'Conteúdo da postagem é obrigatório.' });
         }
 
         const postagem = postModel.buscarPorId(parseInt(id));
         if (!postagem || postagem.userId !== usuarioId) {
-            return res.render('pages/algo', { error: 'Postagem não encontrada ou você não tem permissão para editá-la.' });
+            return res.render('pages/erro', { error: 'Postagem não encontrada ou você não tem permissão para editá-la.' });
         }
         
         //validação da senha
         const usuario = usuarioModel.buscarPorId(usuarioId);
         if (!usuario) {
-            return res.render('pages/algo', { error: 'Erro de sessão. Usuário não encontrado.' });
+            return res.render('pages/erro', { error: 'Erro de sessão. Usuário não encontrado.' });
         }
         
         const senhaValida = bcrypt.compareSync(senha, usuario.senha);
         if (!senhaValida) {
-            return res.render('pages/algo', { error: 'Senha incorreta para editar a postagem.' });
+            return res.render('pages/erro', { error: 'Senha incorreta para editar a postagem.' });
         }
 
         // atualização 
@@ -99,7 +99,7 @@ function atualizarPostagem(req, res) {
         return res.redirect(`/algo?usuarioId=${usuarioId}`);
         
     } catch (error) {
-        res.render('pages/algo', {
+        res.render('pages/erro', {
             error: 'Erro ao editar postagem: ' + error.message
         });
     }
@@ -117,7 +117,7 @@ function excluirPostagem(req, res) {
 
         const postagem = postModel.buscarPorId(parseInt(id));
         if (!postagem || postagem.userId !== usuarioId) {
-            return res.render('pages/algo', { error: 'Postagem não encontrada ou você não tem permissão para excluí-la.' });
+            return res.render('pages/erro', { error: 'Postagem não encontrada ou você não tem permissão para excluí-la.' });
         }
 
         postModel.remover(parseInt(id));
