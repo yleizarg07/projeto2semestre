@@ -29,28 +29,50 @@ function listarUsuarios(req, res) {
 }
 
 //Cria um novo usuário
-function criarUsuario(req, res) {
-    try {
+async function criarUsuario(req, res) {
+    try{
         const { nome, email, nomeUsuario, senha } = req.body;
-        
         //uma "impressão digital" da senha
-        const hashedSenha = bcrypt.hashSync(senha, 10); 
-        
+        const hashedSenha = bcrypt.hash(senha, 10);
         //cria o usuário 
-        usuarioModel.criar(nome, email, nomeUsuario, hashedSenha);
-        
+        await Usuario.create({
+            nome: nome,
+            nome_usuario: nomeUsuario,
+            email: email,
+            senha: hashedSenha,
+            quati_post: 0
+        });
         //redireciona se sucesso
-        return res.redirect('/'); 
+        return res.redirect('/');
     } catch (error) {
         // trata o erro
-        const usuarios = usuarioModel.listar();
-        res.render('pages/algo', {
-            usuarios,
-            error: 'Erro ao criar usuário: ' + error.message 
-        });
+        console.error('Erro ao criar usuario:', error);
+        return res.status(500).render('pages/algo', {
+            error: 'Erro ao criar usuário:' + error.message});
     }
 }
 
+async function criarSocial(req, res) {
+    try{
+        const { relacionamento, aniversario, idade, interesses, hobbies, estilo, animaisEstimacao, paixoes, humor } = req.body;
+        await Usuario.create({
+            relacionamento: relacionamento,
+            aniversario: aniversario,
+            idade: idade,
+            interesses: interesses,
+            hobbies: hobbies,
+            estilo: estilo,
+            animaisEstimacao: animaisEstimacao,
+            paixoes: paixoes,
+            humor: humor
+        });
+        return res.redirect('/');
+    } catch (error) {
+        console.error('Erro ao criar social do usuario:', error);
+        return res.status(500).render('pages/algo', {
+            error: 'Erro ao criar social do usuario:' + error.message});
+        }
+    }
 //Atualiza informações sociais do usuário
 function atualizarSocial(req, res) {
     try {
@@ -212,6 +234,7 @@ function pagina(req, res) {
 module.exports = {
     listarUsuarios,
     criarUsuario,
+    criarSocial,
     removerUsuario,
     atualizarUsuario,
     atualizarSocial, 
