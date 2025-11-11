@@ -1,8 +1,96 @@
+<<<<<<< HEAD
+const Sequelize= require("sequelize");
+const database = require("./db");
+//Tabela do usuario
+const Usuario = database.define('Usuario', {
+    idUsuario: {
+        type: Sequelize.INTEGER,
+        autoincrement : true,
+        allowNull: false,
+        primaryKey: true
+    },
+    nome: {
+        type: Sequelize.STRING(45),
+        allowNull: false
+    },
+    nome_usuario: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    senha: {
+        type: Sequelize.STRING(20),
+        allowNull: false,
+    },
+    email: {
+        type: Sequelize.STRING(286),
+        allowNull: false,
+    },
+    quanti_post: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
+    relacionamento: {
+        type: Sequelize.STRING(45),
+        allowNull: true
+    },
+    aniversario: {
+        type: Sequelize.DATE,
+        allowNull: true
+    },
+    idade: {
+        type: Sequelize.INTEGER(3),
+        allowNull: true
+    },
+           
+    interesses: {
+        type: Sequelize.STRING(255),
+        allowNull: true
+    },
+    hobbies: {
+        type: Sequelize.STRING(255),
+        allowNull: true
+    },
+    estilo: {
+        type: Sequelize.STRING(100),
+        allowNull: true
+    },
+    animaisEstimacao: {
+        type: Sequelize.STRING(100),
+        allowNull: true
+    },
+    paixoes: {
+        type: Sequelize.STRING(255),
+        allowNull: true
+    },
+    humor: {
+        type: Sequelize.STRING(100),
+        allowNull: true
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======
 /*/Banco de Dados provisório :D
 let users = [
     { usuario_id: 1, nome: 'AlexOGrande', nome_usuario: 'alex.grande', email: 'alex.grande@example.com', senha: 'dei@ocu', quantiPosts: 1 },
     { usuario_id: 2, nome: 'AlexOPequeno', nome_usuario: 'alex.pitico', email: 'alex.pitico@example.com', senha: 'dei@abunda', quantiPosts: 0 }
 ];
+>>>>>>> 838a7829ebcf6cc228cdf21166275af50878bcc5
 
  //Funções geradas pelo vs code(vou fazer ajustes depois)
 //cadastrar o usuario
