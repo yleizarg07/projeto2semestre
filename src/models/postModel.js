@@ -1,8 +1,37 @@
-/*Banco de Dados provisório :D
-let posts = [
-    { post_id: 1, titulo: 'Testes', conteudo: 'Conteúdo do post de testes', categoria: 'Teste', usuario_id: 1 },
-];
-
+const Sequelize= require("sequelize");
+const database = require("./db");
+//Tabela da postagem
+const Postagem = database.define('Postagem', {
+    idPostagem: {
+        type: Sequelize.INTEGER,
+        autoincrement : true,
+        allowNull: false,
+        primaryKey: true
+    },
+    titulo: {
+        type: Sequelize.STRING(20),
+        allowNull: false
+    },
+    conteudo: {
+        type: Sequelize.STRING(280),
+        allowNull: false
+    },
+   postUsuario: {
+    type: Sequelize.INTEGER,
+    allowNull: true,
+    unsigned: true,
+    references: {
+        model: 'Usuario',
+        key: 'idUsuario'
+    }
+  },
+    categoria: {
+        type: Sequelize.STRING(50),
+        allowNull: false
+    }
+ 
+});
+module.exports = Postagem;
 //Funções geradas pelo vs code(vou fazer ajustes depois)
 
 function criarPostagem(titulo, conteudo, categoria, usuario_id) {

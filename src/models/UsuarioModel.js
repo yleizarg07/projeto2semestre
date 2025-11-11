@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const Sequelize= require("sequelize");
 const database = require("./db");
 //Tabela do usuario
@@ -14,7 +13,7 @@ const Usuario = database.define('Usuario', {
         allowNull: false
     },
     nome_usuario: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(45),
         allowNull: false
     },
     senha: {
@@ -69,20 +68,7 @@ const Usuario = database.define('Usuario', {
     }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+module.exports = Usuario;
 
 =======
 /*/Banco de Dados provisório :D
@@ -171,7 +157,7 @@ module.exports = {
     editarUsuario,
     exibirUsuario,
     excluirUsuario
-};*/
+};
 // models/usuarioModel.js
 
 let usuarios = [
@@ -278,4 +264,4 @@ module.exports = {
   atualizar,
   atualizarSociais,
   remover
-};
+};*/

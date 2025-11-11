@@ -1,10 +1,37 @@
-/*const { listar } = require("./usuarioModel");
-
-//Banco de Dados provisório :D
-let comemments = [
-    { com_id: 1, resposta: 'Nao curti essa coisa', usuario_id: 2, post_id: 1 },
-];
-
+const Sequelize= require("sequelize");
+const database = require("./db");
+//Tabela de comentarios
+const Comentario = database.define('Comentario', {
+    idComentario: {
+        type: Sequelize.INTEGER,
+        autoincrement : true,
+        allowNull: false,
+        primaryKey: true
+    },
+    conteudo: {
+        type: Sequelize.STRING(280),
+        allowNull: false
+    },
+   comentPost: {
+    type: Sequelize.INTEGER,
+    allowNull: true,
+    unsigned: true,
+    references: {
+        model: 'Postagem',
+        key: 'idPostagem'
+    }
+  },
+    comentUsua: {
+    type: Sequelize.INTEGER,
+    allowNull: true,
+    unsigned: true,
+    references: {
+        model: 'Usuario',
+        key: 'idUsuario'
+    }
+  },
+});
+module.exports = Comentario;
 //Funções geradas pelo vs code(vou fazer ajustes depois)
 function criarComentario(resposta, usuario_id, post_id) {
     const novoComentario = {
