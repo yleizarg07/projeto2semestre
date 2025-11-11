@@ -107,7 +107,6 @@ function atualizarPostagem(req, res) {
 
 //exclui uma postagem
 function excluirPostagem(req, res) {
-    try {
         const { id } = req.params;
         const { usuarioId } = req.session;
 
@@ -124,7 +123,6 @@ function excluirPostagem(req, res) {
         
         return res.redirect(`/algo?usuarioId=${usuarioId}`);
     }
-}
 
 
 //rota para carregar a página principal com todas as postagens

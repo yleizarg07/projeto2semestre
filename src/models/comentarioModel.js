@@ -1,4 +1,4 @@
-const { listar } = require("./usuarioModel");
+/*const { listar } = require("./usuarioModel");
 
 //Banco de Dados provisório :D
 let comemments = [
@@ -58,4 +58,93 @@ module.exports = {
     criarComentario,
     atualizarComentario,
     excluirComentario
+};*/
+
+// models/comentarioModel.js
+
+let comentarios = [
+  // Exemplo inicial
+  {
+    id: 1,
+    conteudo: "Comentário de exemplo",
+    userId: 1,
+    postId: 1,
+    categoria: "Geral", // herdada da postagem, opcional
+    data: new Date()
+  }
+];
+
+// Gerar IDs automáticos
+function gerarId() {
+  return comentarios.length > 0 ? comentarios[comentarios.length - 1].id + 1 : 1;
+}
+
+// Lista todos os comentários
+function listar() {
+  return [...comentarios];
+}
+
+// Lista comentários de uma postagem específica
+function listarPorPostId(postId) {
+  return comentarios.filter(c => c.postId === postId);
+}
+
+// Lista comentários filtrando por categoria (caso exista)
+function listarPorCategoria(categoria) {
+  return comentarios.filter(
+    c => c.categoria && c.categoria.toLowerCase() === categoria.toLowerCase()
+  );
+}
+
+// Busca um comentário pelo ID
+function buscarPorId(id) {
+  return comentarios.find(c => c.id === id);
+}
+
+// Cria um novo comentário
+function criar(conteudo, usuarioId, postId, categoria = "Geral") {
+  const novoComentario = {
+    id: gerarId(),
+    conteudo,
+    userId: usuarioId,
+    postId,
+    categoria,
+    data: new Date()
+  };
+
+  comentarios.push(novoComentario);
+  return novoComentario;
+}
+
+// Atualiza o conteúdo de um comentário
+function atualizar(id, conteudo) {
+  const index = comentarios.findIndex(c => c.id === id);
+  if (index === -1) {
+    throw new Error('Comentário não encontrado');
+  }
+
+  comentarios[index].conteudo = conteudo;
+  comentarios[index].data = new Date(); // atualiza data
+  return comentarios[index];
+}
+
+// Remove um comentário
+function remover(id) {
+  const index = comentarios.findIndex(c => c.id === id);
+  if (index === -1) {
+    throw new Error('Comentário não encontrado');
+  }
+
+  comentarios.splice(index, 1);
+  return true;
+}
+
+module.exports = {
+  listar,
+  listarPorPostId,
+  listarPorCategoria,
+  buscarPorId,
+  criar,
+  atualizar,
+  remover
 };

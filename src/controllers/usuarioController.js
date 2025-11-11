@@ -40,7 +40,7 @@ function criarUsuario(req, res) {
         usuarioModel.criar(nome, email, nomeUsuario, hashedSenha);
         
         //redireciona se sucesso
-        return res.redirect('/algo'); 
+        return res.redirect('/'); 
     } catch (error) {
         // trata o erro
         const usuarios = usuarioModel.listar();
@@ -185,16 +185,6 @@ function removerUsuario(req, res) {
                 error: 'Usuário não encontrado' 
             });
         }
-        
-  
-
-        //apaga as postagens do usuário 
-        const posts = postModel.listar(); 
-        posts.forEach(post => {
-            if (post.userId === userId) {
-                postModel.remover(post.id);
-            }
-        });
         
         return res.redirect('/algo');
     } catch (error) {
