@@ -1,7 +1,8 @@
 const express = require('express');
 const methodOverride = require('method-override');
-//const Routes = require('./routes/TarefasRoutes');
-//const usuarioRoutes = require('./routes/usuarioRoutes');
+const postRoutes = require('./routes/postRoutes');
+const usuarioRoutes = require('./routes/usuarioRoutes');
+const comentarioRoutes = require('./routes/comentarioRoutes')
 const path = require('path');
 const session = require('express-session');
 
@@ -27,16 +28,10 @@ app.get('/', (req, res) => {
     res.redirect('/posts');
 });
 
-//Rotas de comentários
-const comentarioRoute = require('./routes/comentarioRoutes');
 app.use('/comentarios', comentarioRoute);
 
-//Rotas de postagens
-const postRoute = require('./routes/postRoutes');
 app.use('/posts', postRoute);
 
-//Rotas de usuários
-const usuarioRoute = require('./routes/usuarioRoutes');
 app.use('/usuarios', usuarioRoute);
 
 
