@@ -1,28 +1,29 @@
 const comentarioModel = require('../models/comentarioModel');
 const postModel = require('../models/postModel');
 const usuarioModel = require('../models/usuarioModel');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
-//lista comentários,e pode filtrat por categoria ou ID da postagem
-function listarComentarios(req, res) {
+//lista comentários e pode filtrar por categoria ou id do post
+async function listarComentarios(req, res) {
     try {
-        //categria é um filtro ou que 'postId' é usado para listar
-        const { categoria, postId } = req.query; 
-
+        const { categoria, idPost } = req.query;
         let comentarios;
-        
-        if (postId) {
-            //lista comentários de uma postagem específica
-            comentarios = comentarioModel.listarPorPostId(parseInt(postId));
+
+        if (idPost) {
+            comentarios = await comentarioModel.findAll({
+                where: { comentPost: parseInt(idPost) }
+            });
         } else if (categoria) {
-             //lista comentários por categoria (se o model suportar)
-             comentarios = comentarioModel.listarPorCategoria(categoria);
+            comentarios = await comentarioModel.findAll({
+                include: {
+                    model: postModel,
+                    where: { categoria: categoria },
+                }
+            });
         } else {
-            //se não houver filtro, lista todos os comentários
-            comentarios = comentarioModel.listar(); 
+            comentarios = await comentarioModel.findAll();
         }
 
-        //apenas retorna o resultado da busca
         res.render('pages/comentarios', { comentarios });
     } catch (error) {
         res.render('pages/comentarios', {
@@ -32,30 +33,36 @@ function listarComentarios(req, res) {
     }
 }
 
-//cria um novo comentário
-function criarComentario(req, res) {
+//cria novo comentário
+async function criarComentario(req, res) {
     try {
-        const { usuarioId } = req.session; 
-        const { postId, conteudo } = req.body; 
+        const { idUsuario } = req.session;
+        const { idPost, conteudo } = req.body;
 
-        if (!usuarioId) {
-            return res.redirect('/login'); //usuário deve estar logado
+        if (!idUsuario) {
+            return res.redirect('/login');
         }
 
-        if (!conteudo || conteudo.trim() === '' || !postId) {
-            return res.render('pages/criarComentario', { error: 'Conteúdo do comentário e ID da Postagem são obrigatórios.' });
+        if (!conteudo || conteudo.trim() === '' || !idPost) {
+            return res.render('pages/criarComentario', {
+                error: 'Conteúdo e ID da Postagem são obrigatórios.'
+            });
         }
 
-        const postagem = postModel.buscarPorId(parseInt(postId)); 
+        const postagem = await postModel.findByPk(parseInt(idPost));
         if (!postagem) {
-            return res.render('pages/criarComentario', { error: 'Postagem não encontrada.' });
+            return res.render('pages/criarComentario', {
+                error: 'Postagem não encontrada.'
+            });
         }
 
-        comentarioModel.criar(conteudo, usuarioId, parseInt(postId));
+        await comentarioModel.create({
+            conteudo: conteudo,
+            comentPost: parseInt(idPost),
+            comentUsua: idUsuario
+        });
 
-        //redireciona para a postagem de origem
-        return res.redirect(`/postagem/${postId}`); 
-        
+        return res.redirect(`/postagem/${idPost}`);
     } catch (error) {
         res.render('pages/erro', {
             error: 'Erro ao criar comentário: ' + error.message
@@ -63,15 +70,14 @@ function criarComentario(req, res) {
     }
 }
 
-
-//atualiza um comentário existente e exige a senha do usuário
-function atualizarComentario(req, res) {
+//atualiza comentário existente e exige senha do usuário
+async function atualizarComentario(req, res) {
     try {
-        const { id } = req.params; 
-        const { senha, conteudo } = req.body; 
-        const { usuarioId } = req.session; 
-        
-        if (!usuarioId) {
+        const { id } = req.params;
+        const { senha, conteudo } = req.body;
+        const { idUsuario } = req.session;
+
+        if (!idUsuario) {
             return res.redirect('/login');
         }
 
@@ -79,31 +85,26 @@ function atualizarComentario(req, res) {
             return res.render('pages/erro', { error: 'Conteúdo é obrigatório.' });
         }
 
-        const comentario = comentarioModel.buscarPorId(parseInt(id));
-        
-        // verifica a permissão e a existencia
-        if (!comentario || comentario.userId !== usuarioId) {
-            return res.render('pages/erro', { error: 'Comentário não encontrado ou você não tem permissão para editá-lo.' });
+        const comentario = await comentarioModel.findByPk(parseInt(id));
+        if (!comentario || comentario.comentUsua !== idUsuario) {
+            return res.render('pages/erro', {
+                error: 'Comentário não encontrado ou sem permissão.'
+            });
         }
-        
-        //validação da Senha
-        const usuario = usuarioModel.buscarPorId(usuarioId);
+
+        const usuario = await usuarioModel.findByPk(idUsuario);
         if (!usuario) {
             return res.render('pages/erro', { error: 'Erro de sessão. Usuário não encontrado.' });
         }
-        
-        const senhaValida = bcrypt.compareSync(senha, usuario.senha); 
+
+        const senhaValida = await bcrypt.compare(senha, usuario.senha);
         if (!senhaValida) {
             return res.render('pages/erro', { error: 'Senha incorreta.' });
         }
 
-        // atualização 
-        comentarioModel.atualizar(parseInt(id), conteudo);
-        
-        // redireciona para a postagem do comentário
-        const postId = comentario.postId;
-        return res.redirect(`/postagem/${postId}`); 
-        
+        await comentario.update({ conteudo: conteudo });
+
+        return res.redirect(`/postagem/${comentario.comentPost}`);
     } catch (error) {
         res.render('pages/erro', {
             error: 'Erro ao atualizar comentário: ' + error.message
@@ -111,31 +112,27 @@ function atualizarComentario(req, res) {
     }
 }
 
-
-//Exclui um comentário
-function excluirComentario(req, res) {
+//exclui um comentário
+async function excluirComentario(req, res) {
     try {
-        const { id } = req.params; 
-        const { usuarioId } = req.session;
-        
-        if (!usuarioId) {
+        const { id } = req.params;
+        const { idUsuario } = req.session;
+
+        if (!idUsuario) {
             return res.redirect('/login');
         }
 
-        const comentario = comentarioModel.buscarPorId(parseInt(id));
-        
-        // verifica a permissão e a existencia
-        if (!comentario || comentario.userId !== usuarioId) {
-            return res.render('pages/erro', { error: 'Comentário não encontrado ou você não tem permissão para excluí-lo.' });
+        const comentario = await comentarioModel.findByPk(parseInt(id));
+        if (!comentario || comentario.comentUsua !== idUsuario) {
+            return res.render('pages/erro', {
+                error: 'Comentário não encontrado ou sem permissão.'
+            });
         }
-        
-        const postId = comentario.postId; // salva o ID da postagem antes de remover
 
-        comentarioModel.remover(parseInt(id)); 
-        
-        // redireciona para a postagem de origem
-        return res.redirect(`/postagem/${postId}`); 
-        
+        const idPost = comentario.comentPost;
+        await comentario.destroy();
+
+        return res.redirect(`/postagem/${idPost}`);
     } catch (error) {
         res.render('pages/erro', {
             error: 'Erro ao excluir comentário: ' + error.message
