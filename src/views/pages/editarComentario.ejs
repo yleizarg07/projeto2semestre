@@ -1,0 +1,22 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+    <h1>Editar Comentário</h1>
+
+    <% if (error) { %>
+        <p class="erro"><%= error %></p>
+    <% } %>
+
+    <form action="/comentario/atualizar/<%= comentario.id %>" method="POST" class="formulario">
+        
+        <label>Conteúdo:</label>
+        <textarea name="conteudo" rows="4" required><%= comentario.conteudo %></textarea>
+
+        <label>Confirme sua senha:</label>
+        <input type="password" name="senha" required>
+
+        <button type="submit" class="btn-confirmar">Salvar alterações</button>
+    </form>
+</div>
+
+<%- include('../partials/footer') %>

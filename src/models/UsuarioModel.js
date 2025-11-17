@@ -1,5 +1,5 @@
 const Sequelize= require("sequelize");
-const database = require("./db");
+const database = require('../config/db');
 //Tabela do usuario
 const Usuario = database.define('Usuario', {
     idUsuario: {

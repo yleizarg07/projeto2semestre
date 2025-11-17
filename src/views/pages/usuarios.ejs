@@ -1,0 +1,46 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">Lista de Usuários</h2>
+
+    <% if (error) { %>
+        <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Usuário</th>
+                <th>Email</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% usuarios.forEach(usuario => { %>
+                <tr>
+                    <td><%= usuario.idUsuario %></td>
+                    <td><%= usuario.nome %></td>
+                    <td><%= usuario.nome_usuario %></td>
+                    <td><%= usuario.email %></td>
+                    <td>
+                        <a href="/usuarios/editar/<%= usuario.idUsuario %>" class="btn btn-sm btn-primary">Editar</a>
+
+                        <form action="/usuarios/remover/<%= usuario.idUsuario %>" method="POST" style="display:inline-block;">
+                            <button class="btn btn-sm btn-danger" onclick="return confirm('Remover usuário?')">Remover</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+    <a href="/usuarios/novo" class="btn btn-success">Criar Usuário</a>
+
+</div>
+
+<%- include('../partials/footer') %>

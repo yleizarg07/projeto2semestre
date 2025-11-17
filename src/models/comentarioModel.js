@@ -1,5 +1,5 @@
 const Sequelize= require("sequelize");
-const database = require("./db");
+const database = require("../config/db");
 //Tabela de comentarios
 const Comentario = database.define('Comentario', {
     idComentario: {
@@ -17,7 +17,7 @@ const Comentario = database.define('Comentario', {
     allowNull: true,
     unsigned: true,
     references: {
-        model: 'Post',
+        model: 'Postagem',
         key: 'idPost'
     }
   },

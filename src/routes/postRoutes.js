@@ -1,21 +1,37 @@
 const express = require('express');
 const router = express.Router();
-
 const postController = require('../controllers/postController');
+const Post = require('../models/postModel');
 
-// Página principal
+
 router.get('/', postController.pagina);
 
-// Listar postagens
-router.get('/listar', postController.listarPostagens);
+router.get('/postagens', postController.listarPostagens);
 
-// Criar nova postagem
-router.post('/criar', postController.criarPostagem);
+router.get('/postagens/criar', (req, res) => {
+    const { idUsuario } = req.session;
 
-// Atualizar uma postagem existente (precisa do ID)
-router.post('/atualizar/:id', postController.atualizarPostagem);
+    if (!idUsuario) return res.redirect('/login');
 
-// Excluir uma postagem (precisa do ID)
-router.post('/excluir/:id', postController.excluirPostagem);
+    res.render('pages/criarPostagem', { error: null });
+});
+
+router.post('/postagens/criar', postController.criarPostagem);
+
+router.get('/postagens/editar/:id', async (req, res) => {
+    const postagem = await Post.findByPk(parseInt(req.params.id));
+
+    if (!postagem) {
+        return res.render('pages/erro', {
+            error: 'Postagem não encontrada.'
+        });
+    }
+
+    res.render('pages/editarPostagem', { postagem, error: null });
+});
+
+router.post('/postagens/editar/:id', postController.atualizarPostagem);
+
+router.post('/postagens/excluir/:id', postController.excluirPostagem);
 
 module.exports = router;

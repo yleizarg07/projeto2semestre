@@ -1,10 +1,10 @@
 const Sequelize= require("sequelize");
-const database = require("./db");
+const database = require("../config/db");
 //Tabela da postagem
 const Post = database.define('Postagem', {
     idPost: {
         type: Sequelize.INTEGER,
-        autoincrement : true,
+        autoIncrement : true,
         allowNull: false,
         primaryKey: true
     },

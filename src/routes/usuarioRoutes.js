@@ -2,22 +2,28 @@ const express = require('express');
 const router = express.Router();
 const usuarioController = require('../controllers/usuarioController');
 
-// Página inicial de usuários
+// Página inicial dos usuários
 router.get('/', usuarioController.pagina);
 
-// Listar usuários
+// Listar usuários (todos ou por ID via query ?id=)
 router.get('/listar', usuarioController.listarUsuarios);
 
-// Criar novo usuário
+// Criar um usuário
 router.post('/criar', usuarioController.criarUsuario);
 
-// Login de usuário
-router.post('/login', usuarioController.login);
+// Criar dados sociais
+router.post('/social/criar', usuarioController.criarSocial);
 
-// Atualizar usuário
+// Atualizar dados sociais
+router.post('/social/atualizar/:id', usuarioController.atualizarSocial);
+
+// Atualizar dados principais (nome, nome_usuario, senha)
 router.post('/atualizar/:id', usuarioController.atualizarUsuario);
 
 // Remover usuário
-router.get('/remover/:id', usuarioController.removerUsuario);
+router.post('/remover/:id', usuarioController.removerUsuario);
+
+// Login
+router.post('/login', usuarioController.login);
 
 module.exports = router;

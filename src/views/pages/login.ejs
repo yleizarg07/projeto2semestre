@@ -1,7 +1,28 @@
-<h2>Login</h2>
-<form action="/usuarios/login" method="POST">
-  <input type="email" name="email" placeholder="Email" required>
-  <input type="password" name="senha" placeholder="Senha" required>
-  <button type="submit">Entrar</button>
-</form>
-<% if (error) { %><p><%= error %></p><% } %>
+<%- include('../partials/head') %>
+
+<div class="container mt-5" style="max-width: 400px;">
+
+    <h3 class="mb-4 text-center">Login</h3>
+
+    <% if (error) { %>
+        <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+
+    <form action="/usuarios/login" method="POST">
+
+        <div class="form-group mb-3">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label>Senha</label>
+            <input type="password" name="senha" class="form-control" required>
+        </div>
+
+        <button class="btn btn-primary w-100">Entrar</button>
+
+    </form>
+
+</div>
+

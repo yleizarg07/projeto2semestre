@@ -6,6 +6,7 @@ const comentarioRoutes = require('./routes/comentarioRoutes')
 const path = require('path');
 const session = require('express-session');
 
+require('./models/associations');
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -21,18 +22,17 @@ app.use(session({
   secret: 'seuSegredoAqui',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true } 
+  cookie: { secure: false } 
 }));
 
 app.get('/', (req, res) => {
     res.redirect('/posts');
 });
 
-app.use('/comentarios', comentarioRoute);
+app.use('/', comentarioRoutes);
 
-app.use('/posts', postRoute);
+app.use('/posts', postRoutes);
 
-app.use('/usuarios', usuarioRoute);
-
+app.use('/usuarios', usuarioRoutes);
 
 module.exports = app;

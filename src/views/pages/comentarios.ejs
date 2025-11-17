@@ -1,35 +1,29 @@
+<%- include('../partials/head') %>
 <%- include('../partials/header') %>
+<div class="container">
+  <h1>Comentários</h1>
 
-<h1>Comentários</h1>
+  <% if (error) { %>
+      <p class="erro"><%= error %></p>
+  <% } %>
 
-<% if (error) { %>
-  <p style="color:red;"><%= error %></p>
-<% } %>
+  <% if (comentarios.length === 0) { %>
+      <p>Nenhum comentário encontrado.</p>
+  <% } else { %>
+    <ul class="lista-comentarios">
+        <% comentarios.forEach(c => { %>
+          <li class="comentario-item">
+          <p><strong>Conteúdo:</strong> <%= c.conteudo %></p>
+          <p><strong>ID do Post:</strong> <%= c.comentPost %></p>
 
-<ul>
-  <% comentarios.forEach(comentario => { %>
-    <li>
-      <strong>ID:</strong> <%= comentario.id %><br>
-      <strong>Conteúdo:</strong> <%= comentario.conteudo %><br>
-      <form action="/comentario/<%= comentario.id %>/excluir" method="POST">
-        <button type="submit">Excluir</button>
-      </form>
-    </li>
-  <% }) %>
-</ul>
-
-<a href="/criarComentario">Novo comentário</a>
+          <div class="acoes">
+          <a href="/comentario/editar/<%= c.id %>" class="btn-editar">Editar</a>
+          <a href="/comentario/excluir/<%= c.id %>" class="btn-excluir">Excluir</a>
+          </div>
+          </li>
+      <% }); %>
+    </ul>
+  <% } %>
+</div>
 
 <%- include('../partials/footer') %>
-
-/*<h2>Comentários</h2>
-
-<% if (error) { %>
-  <p><%= error %></p>
-<% } %>
-
-<ul>
-  <% comentarios.forEach(c => { %>
-    <li><%= c.conteudo %> (Post: <%= c.postId %>)</li>
-  <% }) %>
-</ul>*/
