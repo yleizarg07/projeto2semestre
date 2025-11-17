@@ -4,7 +4,7 @@ const database = require('../config/db');
 const Usuario = database.define('Usuario', {
     idUsuario: {
         type: Sequelize.INTEGER,
-        autoincrement : true,
+        autoIncrement : true,
         allowNull: false,
         primaryKey: true
     },
@@ -17,7 +17,7 @@ const Usuario = database.define('Usuario', {
         allowNull: false
     },
     senha: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING(100),
         allowNull: false,
     },
     email: {

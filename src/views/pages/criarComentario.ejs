@@ -8,9 +8,10 @@
         <p class="erro"><%= error %></p>
     <% } %>
 
-    <form action="/comentario/criar" method="POST" class="formulario">
+    <form action="/comentarios/criar" method="POST" class="formulario">
+        
         <label>ID da Postagem:</label>
-        <input type="number" name="idPost" required>
+        <input type="number" name="idPost" value="<%= idPost %>" readonly>
 
         <label>Conteúdo:</label>
         <textarea name="conteudo" rows="4" required></textarea>
@@ -20,4 +21,3 @@
 </div>
 
 <%- include('../partials/footer') %>
-

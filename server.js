@@ -1,6 +1,6 @@
 const app = require('./src/app');
 const sequelize = require('./src/config/db');
-require('./src/models/associations');
+
 
 const PORTA = process.env.PORT || 3000;
 const Usuario = require('./src/models/usuarioModel.js');

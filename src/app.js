@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
     res.redirect('/posts');
 });
 
-app.use('/', comentarioRoutes);
+app.use('/comentarios', comentarioRoutes);
 
 app.use('/posts', postRoutes);
 

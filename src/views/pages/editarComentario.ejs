@@ -1,3 +1,4 @@
+<%- include('../partials/head') %>
 <%- include('../partials/header') %>
 
 <div class="container">
@@ -7,7 +8,7 @@
         <p class="erro"><%= error %></p>
     <% } %>
 
-    <form action="/comentario/atualizar/<%= comentario.id %>" method="POST" class="formulario">
+    <form action="/comentarios/editar/<%= comentario.idComentario %>" method="POST" class="formulario">
         
         <label>Conteúdo:</label>
         <textarea name="conteudo" rows="4" required><%= comentario.conteudo %></textarea>

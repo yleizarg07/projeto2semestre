@@ -1,130 +1,51 @@
-<%- include('../partials/head') %>
-<%- include('../partials/header') %>
+<%- include('./partials/head') %>
+<%- include('./partials/header') %>
 
-<div class="container mt-4" style="max-width: 700px;">
+<main class="container">
 
-    <!-- Usuário logado -->
-    <% if (usuarioLogado) { %>
-        <div class="alert alert-primary">
-            Logado como: <strong>@<%= usuarioLogado.nome_usuario %></strong>
-        </div>
-    <% } else { %>
-        <div class="alert alert-secondary">
-            <a href="/usuarios/login">Faça login para postar e comentar</a>
-        </div>
-    <% } %>
+  <h1 class="titulo-principal">Últimos Posts</h1>
 
-    <!-- Criar novo post -->
-    <% if (usuarioLogado) { %>
-        <div class="card mb-4 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">Nova Postagem</h5>
-                <form action="/posts/criar" method="POST">
-                    <textarea name="conteudo" class="form-control mb-3" placeholder="O que está acontecendo?" maxlength="240" required></textarea>
-                    <button class="btn btn-primary w-100">Postar</button>
-                </form>
-            </div>
-        </div>
-    <% } %>
+  <!-- Caso não existam posts -->
+  <% if (!posts || posts.length === 0) { %>
+      <p>Nenhum post encontrado.</p>
 
-    <!-- Timeline de posts -->
-    <% posts.forEach(post => { %>
+  <% } else { %>
 
-        <div class="card mb-4 shadow-sm post-card">
+      <div class="lista-posts">
 
-            <!-- Cabeçalho do post -->
-            <div class="card-body">
+          <% posts.forEach(post => { %>
+              <article class="post-card">
 
-                <div class="d-flex align-items-center mb-2">
-                    <img src="/img/default.png" class="rounded-circle me-2" width="45" height="45">
-                    <div>
-                        <strong>@<%= post.usuario.nome_usuario %></strong><br>
-                        <small class="text-muted"><%= post.createdAt.toLocaleString() %></small>
-                    </div>
-                </div>
+                  <h2 class="post-titulo">
+                      <a href="/posts/<%= post.id %>"><%= post.titulo %></a>
+                  </h2>
 
-                <!-- Conteúdo -->
-                <p class="mb-2"><%= post.conteudo %></p>
+                  <!-- imagem opcional -->
+                  <% if (post.imagem) { %>
+                      <img src="<%= post.imagem %>" alt="Imagem do post" class="post-imagem">
+                  <% } %>
 
-                <!-- Área de ações -->
-                <div class="d-flex justify-content-between">
+                  <p class="post-conteudo"><%= post.conteudo.substring(0, 150) %>...</p>
 
-                    <!-- Total de comentários -->
-                    <span class="text-muted">
-                        💬 <%= post.comentarios.length %> comentários
-                    </span>
+                  <p class="post-meta">
+                      Publicado por 
+                      <strong><%= post.autor || "Autor desconhecido" %></strong> 
+                      em <%= post.created_at.toLocaleDateString('pt-BR') %>
+                  </p>
 
-                    <!-- Botão mostrar comentário -->
-                    <button class="btn btn-sm btn-outline-primary" onclick="toggleComentarios('<%= post.idPost %>')">
-                        Ver comentários
-                    </button>
+                  <a class="btn-leia-mais" href="/posts/<%= post.id %>">Ler mais</a>
 
-                </div>
+              </article>
+          <% }) %>
 
-            </div>
+      </div>
 
-            <!-- Seção de comentários (inicialmente escondida) -->
-            <div id="comentarios-<%= post.idPost %>" class="p-3" style="display: none;">
+  <% } %>
 
-                <!-- Adicionar comentário -->
-                <% if (usuarioLogado) { %>
-                    <form action="/comentarios/criar" method="POST" class="mb-3">
-                        <input type="hidden" name="idPost" value="<%= post.idPost %>">
-                        <textarea class="form-control mb-2" name="conteudo" placeholder="Escreva um comentário..." required></textarea>
-                        <button class="btn btn-sm btn-primary">Comentar</button>
-                    </form>
-                <% } %>
+</main>
 
-                <!-- Lista de comentários -->
-                <% post.comentarios.forEach(c => { %>
-                    <div class="card mb-2 p-2">
+<!-- Rodapé -->
+<%- include('./partials/footer') %>
 
-                        <div class="d-flex align-items-center mb-1">
-                            <img src="/img/default.png" class="rounded-circle me-2" width="32" height="32">
-                            <strong>@<%= c.usuario.nome_usuario %></strong>
-                        </div>
-
-                        <p class="mb-1"><%= c.conteudo %></p>
-                        <small class="text-muted"><%= c.createdAt.toLocaleString() %></small>
-
-                        <!-- Botões editar/apagar comentário -->
-                        <% if (usuarioLogado && usuarioLogado.idUsuario === c.comentUsua) { %>
-
-                            <div class="mt-2">
-
-                                <!-- Editar -->
-                                <form action="/comentarios/atualizar/<%= c.idComentario %>" method="POST" class="mb-1">
-                                    <input type="password" name="senha" class="form-control mb-2" placeholder="Digite sua senha">
-                                    <textarea name="conteudo" class="form-control mb-2"><%= c.conteudo %></textarea>
-                                    <button class="btn btn-sm btn-warning">Atualizar</button>
-                                </form>
-
-                                <!-- Excluir -->
-                                <form action="/comentarios/excluir/<%= c.idComentario %>" method="POST">
-                                    <button class="btn btn-sm btn-danger">Excluir</button>
-                                </form>
-
-                            </div>
-
-                        <% } %>
-
-                    </div>
-                <% }) %>
-
-            </div>
-
-        </div>
-
-    <% }) %>
-
-</div>
-
-<script>
-    function toggleComentarios(id) {
-        const box = document.getElementById("comentarios-" + id);
-        box.style.display = (box.style.display === "none") ? "block" : "none";
-    }
-</script>
-
-<%- include('../partials/footer') %>
-
+</body>
+</html>

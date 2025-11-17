@@ -4,7 +4,7 @@ const database = require("../config/db");
 const Comentario = database.define('Comentario', {
     idComentario: {
         type: Sequelize.INTEGER,
-        autoincrement : true,
+        autoIncrement : true,
         allowNull: false,
         primaryKey: true
     },
@@ -30,5 +30,9 @@ const Comentario = database.define('Comentario', {
         key: 'idUsuario'
     }
   },
+},
+{   
+    tableName: 'Comentario', 
+    timestamps: false
 });
 module.exports = Comentario;

@@ -1,26 +1,33 @@
 <%- include('../partials/head') %>
 <%- include('../partials/header') %>
+
 <div class="container">
   <h1>Comentários</h1>
 
   <% if (error) { %>
-      <p class="erro"><%= error %></p>
+  <p class="erro"><%= error %></p>
   <% } %>
 
   <% if (comentarios.length === 0) { %>
-      <p>Nenhum comentário encontrado.</p>
+  <p>Nenhum comentário encontrado.</p>
   <% } else { %>
-    <ul class="lista-comentarios">
-        <% comentarios.forEach(c => { %>
-          <li class="comentario-item">
-          <p><strong>Conteúdo:</strong> <%= c.conteudo %></p>
-          <p><strong>ID do Post:</strong> <%= c.comentPost %></p>
+  <ul class="lista-comentarios">
+  <% comentarios.forEach(c => { %>
 
-          <div class="acoes">
-          <a href="/comentario/editar/<%= c.id %>" class="btn-editar">Editar</a>
-          <a href="/comentario/excluir/<%= c.id %>" class="btn-excluir">Excluir</a>
-          </div>
-          </li>
+  <li class="comentario-item">
+
+      <p><strong>Conteúdo:</strong> <%= c.conteudo %></p>
+      <p><strong>ID do Post:</strong> <%= c.comentPost %></p>
+
+      <div class="acoes">
+        <a href="/comentarios/editar/<%= c.idComentario %>" class="btn-editar">Editar</a>
+
+        <form action="/comentarios/excluir/<%= c.idComentario %>" method="POST">
+            <button class="btn-excluir">Excluir</button>
+        </form>
+      </div>
+  </li>
+
       <% }); %>
     </ul>
   <% } %>

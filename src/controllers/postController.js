@@ -1,6 +1,5 @@
 const Post = require('../models/postModel');
 const Usuario = require('../models/usuarioModel');
-const Comentario = require('../models/comentarioModel');
 const bcrypt = require('bcryptjs');
 
 //lista as postagens e pode  filtrar por id, usuario e categoria

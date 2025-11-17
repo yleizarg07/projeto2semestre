@@ -1,9 +1,9 @@
 const {Sequelize} = require('sequelize');
-const sequelize = new Sequelize('blog_web', 'root', 'biA@2008', {
-    dialect: 'mysql',
-    host: 'localhost',
-    port: 3306
-});
+const sequelize = new Sequelize('mysql://usuario:senha@host:port/nome_do_banco',
+  {
+    dialect: 'mysql'
+  }
+);
 
 sequelize.authenticate()
  .then(() => console.log('Conectado ao MySQL com Sequelize!'))
