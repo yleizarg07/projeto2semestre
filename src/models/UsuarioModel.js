@@ -1,7 +1,7 @@
 const Sequelize= require("sequelize");
 const database = require('../config/db');
 //Tabela do usuario
-const Usuario = database.define('Usuario', {
+const usuario = database.define('usuario', {
     idUsuario: {
         type: Sequelize.INTEGER,
         autoIncrement : true,
@@ -68,5 +68,5 @@ const Usuario = database.define('Usuario', {
     }
 });
 
-module.exports = Usuario;
+module.exports = usuario;
 
