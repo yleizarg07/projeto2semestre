@@ -1,22 +1,27 @@
 const path = require('path');
 const bcrypt = require('bcryptjs');
-const Usuario = require('../models/usuarioModel');
-const Post = require('../models/postModel');
+const UsuarioModel = require('../models/usuarioModel');
+const PostModel = require('../models/postModel');
 
 //lista todos os usuarios ou um usuario especifico por id
 async function listarUsuarios(req, res) {
     try {
-        const { id } = req.query;
-        let usuarios;
+        const { nomeUsuario } = req.query; //requisita o nome de usuário
+        let usuarios; //cria a variável usuarios
 
-        if (id) {
-            const usuario = await Usuario.findByPk(parseInt(id));
-            usuarios = usuario ? [usuario] : [];
+        if (nomeUsuario) {
+            const usuarioEncontrado = await UsuarioModel.findOne({ where: { nome_usuario: nomeUsuario } }); //busca o usuário pelo nome
+            if (!usuarioEncontrado) {
+                return res.render('pages/index', {
+                    error: 'Usuário não encontrado'
+                });
+            }
+            usuarios = [usuarioEncontrado]; //coloca o usuário encontrado dentro de um array
         } else {
-            usuarios = await Usuario.findAll();
+            usuarios = await UsuarioModel.findAll(); //retorna todos os usuários
         }
 
-        return res.render('pages/algo', { usuarios });
+        return res.render('pages/algo', { usuarios }); //renderiza a página com a lista de usuários
     } catch (error) {
         console.error('Erro ao listar usuários:', error);
         return res.render('pages/algo', {
@@ -26,20 +31,21 @@ async function listarUsuarios(req, res) {
     }
 }
 
+
 //cria um novo usuario
 async function criarUsuario(req, res) {
     try {
-        const { nome, email, nomeUsuario, senha } = req.body;
+        const { nome, email, nomeUsuario, senha } = req.body;//requere os envios do usuario
 
-        const hashedSenha = await bcrypt.hash(senha, 10);
+        const hashedSenha = await bcrypt.hash(senha, 10);//poem a impressão digital na senha
 
-        await Usuario.create({
+        await UsuarioModel.create({
             nome: nome,
             nome_usuario: nomeUsuario,
             email: email,
             senha: hashedSenha,
             quanti_post: 0
-        });
+        });//cria o usuario
 
         return res.redirect('/');
     } catch (error) {
@@ -55,9 +61,9 @@ async function criarSocial(req, res) {
     try {
         const {
             relacionamento, aniversario, idade, interesses, hobbies, estilo, animaisEstimacao, paixoes, humor
-        } = req.body;
+        } = req.body;//reqwuere as informações enviadas pelo usuario
 
-        await Usuario.create({
+        await UsuarioModel.create({
             relacionamento: relacionamento,
             aniversario: aniversario,
             idade: idade,
@@ -67,7 +73,7 @@ async function criarSocial(req, res) {
             animaisEstimacao: animaisEstimacao,
             paixoes: paixoes,
             humor: humor
-        });
+        });//armazena as informações na tabela do usuario
 
         return res.redirect('/');
     } catch (error) {
@@ -84,34 +90,33 @@ async function atualizarSocial(req, res) {
         const { id } = req.params;
         const {
             relacionamento, aniversario, idade, interesses,hobbies, estilo, animaisEstimacao, paixoes, humor
-        } = req.body;
+        } = req.body;//requere as infos enviadas pelo usuaerio
 
         const dadosSociais = {
             relacionamento, aniversario, idade, interesses, hobbies, estilo, animaisEstimacao, paixoes, humor
-        };
+        };//armazena nan variavel dadossociais
 
         // remove campos indefinidos
         Object.keys(dadosSociais).forEach(
             key => dadosSociais[key] === undefined && delete dadosSociais[key]
-        );
+        );//foreach percorre o array dadossociais, object.keys retorna um array com todas as propriedades, essa parte serve para remover as propriedades indefinidas
 
-        const [atualizados] = await Usuario.update(dadosSociais, {
+        const [atualizados] = await UsuarioModel.update(dadosSociais, {
             where: { idUsuario: parseInt(id) }
-        });
-
+        });// o const [atualizados] serve para extrair os valores da array 
         if (!atualizados) {
-            const usuarios = await Usuario.findAll();
+            const todosUsuarios = await UsuarioModel.findAll();//mostra tudo
             return res.render('pages/algo', {
-                usuarios,
+                usuarios: todosUsuarios,
                 error: 'Usuário não encontrado'
             });
         }
 
         return res.redirect('/algo');
     } catch (error) {
-        const usuarios = await Usuario.findAll();
+        const todosUsuarios = await UsuarioModel.findAll();
         return res.render('pages/algo', {
-            usuarios,
+            usuarios: todosUsuarios,
             error: 'Erro ao atualizar informações sociais: ' + error.message
         });
     }
@@ -120,19 +125,19 @@ async function atualizarSocial(req, res) {
 //realiza o login do usuário
 async function login(req, res) {
     try {
-        const { email, senha } = req.body;
+        const { email, senha } = req.body;//requere o email e a senha enviados pelo usuario
 
-        const usuario = await Usuario.findOne({ where: { email } });
-        if (!usuario) {
-            return res.render('pages/login', { error: 'Usuário não encontrado' });
+        const usuarioEncontrado = await UsuarioModel.findOne({ where: { email } });//findOne busca um unico registro no bd
+        if (!usuarioEncontrado) {
+            return res.render('pages/login', { error: 'Usuário não encontrado, faça seu cadastro' });
         }
 
-        const senhaValida = await bcrypt.compare(senha, usuario.senha);
+        const senhaValida = await bcrypt.compare(senha, usuarioEncontrado.senha);//compara as senhas
         if (!senhaValida) {
             return res.render('pages/login', { error: 'Senha incorreta' });
         }
 
-        req.session.idUsuario = usuario.idUsuario;
+        req.session.idUsuario = usuarioEncontrado.idUsuario;
 
         return res.redirect('/algo');
     } catch (error) {
@@ -146,31 +151,31 @@ async function login(req, res) {
 //atualiza os dados principais do usuário, como nome, nomeUsuario, senha
 async function atualizarUsuario(req, res) {
     try {
-        const { id } = req.params;
-        const { nome, nomeUsuario, senha } = req.body;
+        const { id } = req.params;//reqyer os parametro da url
+        const { nome, nomeUsuario, senha } = req.body;//requere os dados enviados pelo usuario
 
-        let dadosAtualizados = { nome, nome_usuario: nomeUsuario };
+        let dadosAtualizados = { nome, nome_usuario: nomeUsuario };//recebe os dados que serão atualizados
 
         if (senha) {
             dadosAtualizados.senha = await bcrypt.hash(senha, 10);
-        }
+        }//coloca a impressão digital na senha
 
-        const [atualizados] = await Usuario.update(dadosAtualizados, {
+        const [atualizados] = await UsuarioModel.update(dadosAtualizados, {
             where: { idUsuario: parseInt(id) }
         });
 
         if (!atualizados) {
-            const usuarios = await Usuario.findAll();
+            const todosUsuarios = await UsuarioModel.findAll();//mostra tudo
             return res.render('pages/algo', {
-                usuarios,
+                usuarios: todosUsuarios,
                 error: 'Usuário não encontrado'
             });
         }
         return res.redirect('/algo');
     } catch (error) {
-        const usuarios = await Usuario.findAll();
+        const todosUsuarios = await UsuarioModel.findAll();
         return res.render('pages/algo', {
-            usuarios,
+            usuarios: todosUsuarios,
             error: 'Erro ao atualizar usuário: ' + error.message
         });
     }
@@ -179,33 +184,33 @@ async function atualizarUsuario(req, res) {
 //remove um usuário 
 async function removerUsuario(req, res) {
     try {
-        const { id } = req.params;
-        const idUsuario = parseInt(id);
+        const { id } = req.params;//requere os parametros da url
+        const idUsuario = parseInt(id);//armazena o id na variavel usuario
 
-        const removidos = await Usuario.destroy({ where: { idUsuario: idUsuario } });
+        const removidos = await UsuarioModel.destroy({ where: { idUsuario: idUsuario } });//destroi
 
         if (!removidos) {
-            const usuarios = await Usuario.findAll();
+            const todosUsuarios = await UsuarioModel.findAll();//mostra tudo
             return res.render('pages/algo', {
-                usuarios,
+                usuarios: todosUsuarios,
                 error: 'Usuário não encontrado'
             });
         }
 
         return res.redirect('/algo');
     } catch (error) {
-        const usuarios = await Usuario.findAll();
+        const todosUsuarios = await UsuarioModel.findAll();//mostra tudo
         return res.render('pages/algo', {
-            usuarios,
+            usuarios: todosUsuarios,
             error: 'Erro ao remover usuário: ' + error.message
         });
     }
 }
 
 //carrega página inicial
-async function pagina(req, res) {
+async function paginaUsuario(req, res) {
     try {
-        const usuarios = await Usuario.findAll();
+        const usuarios = await UsuarioModel.findAll();//mostra tudo
         return res.render('pages/algo', { usuarios });
     } catch (error) {
         return res.render('pages/algo', {
@@ -223,5 +228,5 @@ module.exports = {
     atualizarUsuario,
     removerUsuario,
     login,
-    pagina
+    pagina: paginaUsuario
 };
