@@ -89,22 +89,22 @@ async function atualizarComentario(req, res) {
         if (!comentario || comentario.comentUsua !== idUsuario) {
             return res.render('pages/erro', {
                 error: 'Comentário não encontrado ou sem permissão.'
-            });
+            });//verifica se o comentario existe  e se o id do usuareio é o mesmo que criou o comenatrio, verificando a permissão
         }
 
-        const usuario = await usuarioModel.findByPk(idUsuario);
+        const usuario = await usuarioModel.findByPk(idUsuario); //busca usuario pelo id
         if (!usuario) {
             return res.render('pages/erro', { error: 'Erro de sessão. Usuário não encontrado.' });
-        }
+        }//verifica o id do usuario
 
         const senhaValida = await bcrypt.compare(senha, usuario.senha);
         if (!senhaValida) {
             return res.render('pages/erro', { error: 'Senha incorreta.' });
-        }
+        }//compara as senhas, a dada pelo usuario e a armazanada, e verifica se está certa
 
-        await comentario.update({ conteudo: conteudo });
+        await comentario.update({ conteudo: conteudo });//atualiza de fato o conteudo
 
-        return res.redirect(`/postagem/${comentario.comentPost}`);
+        return res.redirect(`/postagem/${comentario.comentPost}`);//redireciona para a pagina de postagem com o comentario atualizado
     } catch (error) {
         res.render('pages/erro', {
             error: 'Erro ao atualizar comentário: ' + error.message
@@ -115,15 +115,15 @@ async function atualizarComentario(req, res) {
 //exclui um comentário
 async function excluirComentario(req, res) {
     try {
-        const { id } = req.params;
-        const { idUsuario } = req.session;
+        const { id } = req.params; //requere o id dos parametros
+        const { idUsuario } = req.session;//armazena a ssession do usuario
 
         if (!idUsuario) {
             return res.redirect('/login');
-        }
+        }//pede para fazer lohin se mão estiver logado
 
-        const comentario = await comentarioModel.findByPk(parseInt(id));
-        if (!comentario || comentario.comentUsua !== idUsuario) {
+        const comentario = await comentarioModel.findByPk(parseInt(id));//busca comentario pelo id
+        if (!comentario || comentario.comentUsua !== idUsuario) { //verifica se o comentario existe ou se o usuario, pelo id, pode apagar ou não
             return res.render('pages/erro', {
                 error: 'Comentário não encontrado ou sem permissão.'
             });
