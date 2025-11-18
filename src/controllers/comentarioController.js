@@ -1,6 +1,6 @@
-const comentarioModel = require('./models/comentarioModel');
-const postModel = require('./models/postModel');
-const usuarioModel = require('./models/usuarioModel');
+const comentarioModel = require('../models/comentarioModel');
+const postModel = require('../models/postModel');
+const usuarioModel = require('../models/usuarioModel');
 const bcrypt = require('bcryptjs');
 
 //lista comentários e pode filtrar por categoria ou id do post
