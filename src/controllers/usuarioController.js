@@ -1,7 +1,7 @@
 const path = require('path');
 const bcrypt = require('bcryptjs');
-const Usuario = require('../models/usuarioModel');
-const Post = require('../models/postModel');
+const Usuario = require('./models/usuarioModel');
+const Post = require('./models/postModel');
 
 //lista todos os usuarios ou um usuario especifico por id
 async function listarUsuarios(req, res) {

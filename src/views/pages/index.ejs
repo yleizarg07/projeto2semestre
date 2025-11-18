@@ -5,7 +5,6 @@
 
   <h1 class="titulo-principal">Últimos Posts</h1>
 
-  <!-- Caso não existam posts -->
   <% if (!posts || posts.length === 0) { %>
       <p>Nenhum post encontrado.</p>
 
@@ -20,7 +19,7 @@
                       <a href="/posts/<%= post.id %>"><%= post.titulo %></a>
                   </h2>
 
-                  <!-- imagem opcional -->
+
                   <% if (post.imagem) { %>
                       <img src="<%= post.imagem %>" alt="Imagem do post" class="post-imagem">
                   <% } %>
@@ -44,7 +43,6 @@
 
 </main>
 
-<!-- Rodapé -->
 <%- include('./partials/footer') %>
 
 </body>
