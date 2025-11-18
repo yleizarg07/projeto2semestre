@@ -32,5 +32,4 @@ const Post = database.define('Post', {
  
 });
 module.exports = Post;
-//Funções geradas pelo vs code(vou fazer ajustes depois)
 
