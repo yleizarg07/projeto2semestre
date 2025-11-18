@@ -1,6 +1,6 @@
-const usuarioModel = require('./models/usuarioModel');
-import Post from "./postModel";
-import Comentario from "./comentarioModel";
+/*const usuarioModel = require("usuarioModel");
+const Post = require ("postModel");
+const Comentario = require ("comentarioModel");
 
 // Post -> Comentario
 Post.hasMany(Comentario, { foreignKey: "comentPost" });
@@ -14,8 +14,8 @@ Post.belongsTo(Usuario, { foreignKey: "postUsuario" });
 Usuario.hasMany(Comentario, { foreignKey: "comentUsua" });
 Comentario.belongsTo(Usuario, { foreignKey: "comentUsua" });
 
-export default {
+module.exports = {
     Usuario,
     Post,
     Comentario
-};
+};*/
