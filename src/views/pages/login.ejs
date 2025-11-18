@@ -1,4 +1,4 @@
-<%- include('../partials/head') %>
+<!--<%- include('../partials/head') %>
 
 <div class="container mt-5" style="max-width: 400px;">
 
@@ -24,5 +24,23 @@
 
     </form>
 
+</div>-->
+<%include ../partials/head %>
+<%include('partials/header.ejs')%>
+
+<h2 class="page-title">Login</h2>
+
+<div class="login-form">
+    <form action="/login" method="POST">
+        <input type="email" name="emailInput" placeholder="email">
+        <input type="password" name="senhaInput" placeholder="senha">
+        <button type="submit">Login</button>
+    </form>
 </div>
+
+
+
+<%include('partials/footer.ejs')%>
+
+
 
