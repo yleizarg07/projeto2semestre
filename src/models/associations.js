@@ -1,4 +1,4 @@
-const usuarioModel = require('../models/usuarioModel');
+const usuarioModel = require('./models/usuarioModel');
 import Post from "./postModel";
 import Comentario from "./comentarioModel";
 
