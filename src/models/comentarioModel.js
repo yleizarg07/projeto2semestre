@@ -26,7 +26,7 @@ const Comentario = database.define('Comentario', {
     allowNull: true,
     unsigned: true,
     references: {
-        model: 'Usuario',
+        model: 'usuario',
         key: 'idUsuario'
     }
   },
