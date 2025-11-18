@@ -3,10 +3,10 @@ const database = require('../config/db');
 //Tabela do usuario
 const usuario = database.define('usuario', {
     idUsuario: {
-        type: Sequelize.INTEGER,
-        autoIncrement : true,
-        allowNull: false,
-        primaryKey: true
+  type: Sequelize.INTEGER.UNSIGNED,
+  autoIncrement: true,
+  primaryKey: true
+
     },
     nome: {
         type: Sequelize.STRING(45),

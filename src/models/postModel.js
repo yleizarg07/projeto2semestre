@@ -17,7 +17,7 @@ const Post = database.define('Post', {
         allowNull: false
     },
    postUsuario: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.INTEGER.UNSIGNED,
     allowNull: true,
     unsigned: true,
     references: {

@@ -1,9 +1,13 @@
-const {Sequelize} = require('sequelize');
-const sequelize = new Sequelize('mysql://usuario:senha@host:port/nome_do_banco',
-  {
-    dialect: 'mysql'
-  }
-);
+const { Sequelize } = require('sequelize');
+
+const sequelize = new Sequelize('railway', 'root', 'PLcqMPtoVkouBbKuoBTFiztiTkGyNcJQ', {
+  host: 'nozomi.proxy.rlwy.net',
+  port: 38126,
+  dialect: 'mysql',
+  logging: false
+});
+
+module.exports = sequelize;
 
 sequelize.authenticate()
  .then(() => console.log('Conectado ao MySQL com Sequelize!'))
