@@ -13,16 +13,16 @@ const Comentario = database.define('Comentario', {
         allowNull: false
     },
    comentPost: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.INTEGER.UNSIGNED,
     allowNull: true,
     unsigned: true,
     references: {
-        model: 'Postagem',
+        model: 'post',
         key: 'idPost'
     }
   },
     comentUsua: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.INTEGER.UNSIGNED,
     allowNull: true,
     unsigned: true,
     references: {

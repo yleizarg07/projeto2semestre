@@ -1,9 +1,9 @@
 const Sequelize= require("sequelize");
 const database = require("../config/db");
 //Tabela da postagem
-const Post = database.define('Post', {
+const Post = database.define('post', {
     idPost: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER.UNSIGNED,
         autoIncrement : true,
         allowNull: false,
         primaryKey: true
