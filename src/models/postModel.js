@@ -29,7 +29,9 @@ const Post = database.define('post', {
         type: Sequelize.STRING(50),
         allowNull: false
     }
- 
+},
+{    freezeTableName: true,
+    timestamps: false
 });
 module.exports = Post;
 

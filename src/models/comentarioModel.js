@@ -1,7 +1,7 @@
 const Sequelize= require("sequelize");
 const database = require("../config/db");
 //Tabela de comentarios
-const Comentario = database.define('Comentario', {
+const comentario = database.define('comentario', {
     idComentario: {
         type: Sequelize.INTEGER,
         autoIncrement : true,
@@ -32,7 +32,7 @@ const Comentario = database.define('Comentario', {
   },
 },
 {   
-    tableName: 'Comentario', 
+     freezeTableName: true,
     timestamps: false
 });
-module.exports = Comentario;
+module.exports = comentario;

@@ -1,12 +1,12 @@
-const Sequelize= require("sequelize");
+const Sequelize = require("sequelize");
 const database = require('../config/db');
-//Tabela do usuario
+
+// Tabela do usuario
 const usuario = database.define('usuario', {
     idUsuario: {
-  type: Sequelize.INTEGER.UNSIGNED,
-  autoIncrement: true,
-  primaryKey: true
-
+        type: Sequelize.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true
     },
     nome: {
         type: Sequelize.STRING(45),
@@ -41,7 +41,6 @@ const usuario = database.define('usuario', {
         type: Sequelize.INTEGER(3),
         allowNull: true
     },
-           
     interesses: {
         type: Sequelize.STRING(255),
         allowNull: true
@@ -66,7 +65,10 @@ const usuario = database.define('usuario', {
         type: Sequelize.STRING(100),
         allowNull: true
     }
+}, {
+    freezeTableName: true,
+    timestamps: false
+    
 });
 
 module.exports = usuario;
-
