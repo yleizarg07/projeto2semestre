@@ -3,26 +3,28 @@ const router = express.Router();
 const comentarioController = require('../controllers/comentarioController');
 const comentarioModel = require('../models/comentarioModel');
 
-router.get('/comentarios', comentarioController.listarComentarios);
+//Listar comentários 
+router.get('/', comentarioController.listarComentarios);
 
-router.get('/comentarios/criar/:idPost', (req, res) => {
+// ormulário de criação para um post específico
+router.get('/criar/:idPost', (req, res) => {
     res.render('pages/criarComentario', { idPost: req.params.idPost, error: null });
 });
 
-router.post('/comentarios/criar', comentarioController.criarComentario);
+//Criar comentário
+router.post('/criar', comentarioController.criarComentario);
 
-router.get('/comentarios/editar/:id', async (req, res) => {
+//Editar comentário 
+router.get('/editar/:id', async (req, res) => {
     const comentario = await comentarioModel.findByPk(parseInt(req.params.id));
-
     if (!comentario) {
         return res.render('pages/erro', { error: 'Comentário não encontrado.' });
     }
-
     res.render('pages/editarComentario', { comentario, error: null });
 });
 
-router.post('/comentarios/editar/:id', comentarioController.atualizarComentario);
-
-router.post('/comentarios/excluir/:id', comentarioController.excluirComentario);
+//Atualizar e Excluir
+router.post('/editar/:id', comentarioController.atualizarComentario);
+router.post('/excluir/:id', comentarioController.excluirComentario);
 
 module.exports = router;
