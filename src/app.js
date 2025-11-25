@@ -16,7 +16,7 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "view"));
+app.set("views", path.join(__dirname, "views"));
 
 app.use(session({
   secret: 'seuSegredoAqui',

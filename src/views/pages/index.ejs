@@ -1,18 +1,23 @@
-<%- include('./partials/head') %>
-<%- include('./partials/header') %>
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
 
 <main class="container">
 
   <h1 class="titulo-principal">Últimos Posts</h1>
 
-  <% if (!posts || posts.length === 0) { %>
+  <!-- Botão para criar postagem -->
+    <a href="/posts/postagens/criar" class="btn btn-primary">
+        Criar nova postagem
+    </a>
+
+  <% if (!postagens || postagens.length === 0) { %>
       <p>Nenhum post encontrado.</p>
 
   <% } else { %>
 
       <div class="lista-posts">
 
-          <% posts.forEach(post => { %>
+          <% postagens.forEach(post => { %>
               <article class="post-card">
 
                   <h2 class="post-titulo">
@@ -20,19 +25,18 @@
                   </h2>
 
 
-                  <% if (post.imagem) { %>
-                      <img src="<%= post.imagem %>" alt="Imagem do post" class="post-imagem">
+                  <% if (postagem.imagem) { %>
+                      <img src="<%= postagem.imagem %>" alt="Imagem do post" class="post-imagem">
                   <% } %>
 
-                  <p class="post-conteudo"><%= post.conteudo.substring(0, 150) %>...</p>
-
+                  <p class="post-conteudo"><%= postagem.conteudo.substring(0, 150) %>...</p>
                   <p class="post-meta">
                       Publicado por 
-                      <strong><%= post.autor || "Autor desconhecido" %></strong> 
-                      em <%= post.created_at.toLocaleDateString('pt-BR') %>
+                      <strong><%= postagem.autor || "Autor desconhecido" %></strong> 
+                      em <%= postagem.created_at.toLocaleDateString('pt-BR') %>
                   </p>
 
-                  <a class="btn-leia-mais" href="/posts/<%= post.id %>">Ler mais</a>
+                  <a class="btn-leia-mais" href="/posts/<%= postagem.id %>">Ler mais</a>
 
               </article>
           <% }) %>
@@ -43,7 +47,7 @@
 
 </main>
 
-<%- include('./partials/footer') %>
+<%- include('../partials/footer') %>
 
 </body>
 </html>
