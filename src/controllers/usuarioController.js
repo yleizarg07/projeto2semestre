@@ -7,12 +7,15 @@ const PostModel = require('../models/postModel');
 async function listarUsuarios(req, res) {
     try {
         const { nomeUsuario } = req.query; //requisita o nome de usuário
-        let usuarios; //cria a variável usuarios
+        var usuarios; //cria a variável usuarios
 
         if (nomeUsuario) {
+            console.log("Nome de usuário fornecido:", nomeUsuario);
             const usuarioEncontrado = await UsuarioModel.findOne({ where: { nome_usuario: nomeUsuario } }); //busca o usuário pelo nome
+            console.log("Usuário encontrado:", usuarioEncontrado);
             if (!usuarioEncontrado) {
-                return res.render('pages/index', {
+                return res.render('pages/index', {usuarios: [],
+                    postagens: [],
                     error: 'Usuário não encontrado'
                 });
             }
@@ -21,11 +24,12 @@ async function listarUsuarios(req, res) {
             usuarios = await UsuarioModel.findAll(); //retorna todos os usuários
         }
 
-        return res.render('pages/algo', { usuarios }); //renderiza a página com a lista de usuários
+        return res.render('pages/index', { usuarios:usuarios, postagens:[] }); //renderiza a página com a lista de usuários
     } catch (error) {
         console.error('Erro ao listar usuários:', error);
-        return res.render('pages/algo', {
+        return res.render('pages/index', {
             usuarios: [],
+            postagens: [],
             error: 'Erro ao listar usuários: ' + error.message
         });
     }
@@ -50,7 +54,7 @@ async function criarUsuario(req, res) {
         return res.redirect('/');
     } catch (error) {
         console.error('Erro ao criar usuário:', error);
-        return res.status(500).render('pages/algo', {
+        return res.status(500).render('pages/usuarios', {
             error: 'Erro ao criar usuário: ' + error.message
         });
     }
@@ -211,10 +215,11 @@ async function removerUsuario(req, res) {
 async function paginaUsuario(req, res) {
     try {
         const usuarios = await UsuarioModel.findAll();//mostra tudo
-        return res.render('pages/algo', { usuarios });
+        return res.render('pages/index', { usuarios:usuarios, postagens:[] });
     } catch (error) {
-        return res.render('pages/algo', {
+        return res.render('pages/index', {
             usuarios: [],
+            postagens: [],
             error: 'Erro ao carregar a página: ' + error.message
         });
     }

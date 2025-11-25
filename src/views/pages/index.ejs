@@ -1,53 +1,57 @@
 <%- include('../partials/head') %>
 <%- include('../partials/header') %>
 
-<main class="container">
+<div class="container mt-4" style="max-width:1100px;">
+<div class="row">
+<!-- Feed -->
+<div class="col-md-8">
+<div class="d-flex justify-content-between align-items-center mb-3">
+<h3>Últimos Posts</h3>
 
-  <h1 class="titulo-principal">Últimos Posts</h1>
+<% if (session && session.idUsuario) { %>
+      <a href="/postagens/criar" class="btn btn-primary">Criar nova postagem</a>
+    <% } else { %>
+      <a href="/login" class="btn btn-outline-primary">Entrar para publicar</a>
+    <% } %>
+  </div>
 
-  <!-- Botão para criar postagem -->
-    <a href="/posts/postagens/criar" class="btn btn-primary">
-        Criar nova postagem
-    </a>
+  <% if (postagens && postagens.length > 0) { %>
+    <% postagens.forEach(p => { %>
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-2">
+            <img src="/img/default.png" width="48" class="rounded-circle me-3">
+            <div>
+              <strong>Usuário <%= p.postUsuario %></strong><br>
+              <small class="text-muted"><%= p.categoria || 'Geral' %></small>
+            </div>
+          </div>
 
-  <% if (!postagens || postagens.length === 0) { %>
-      <p>Nenhum post encontrado.</p>
+          <h5><%= p.titulo %></h5>
+          <p><%= p.conteudo %></p>
 
-  <% } else { %>
+          <div>
+            <a href="/postagem/<%= p.idPost %>" class="me-3">Ver</a>
+            <% if (session && session.idUsuario === p.postUsuario) { %>
+              <a href="/postagens/editar/<%= p.idPost %>" class="me-2">Editar</a>
 
-      <div class="lista-posts">
-
-          <% postagens.forEach(post => { %>
-              <article class="post-card">
-
-                  <h2 class="post-titulo">
-                      <a href="/posts/<%= post.id %>"><%= post.titulo %></a>
-                  </h2>
-
-
-                  <% if (postagem.imagem) { %>
-                      <img src="<%= postagem.imagem %>" alt="Imagem do post" class="post-imagem">
-                  <% } %>
-
-                  <p class="post-conteudo"><%= postagem.conteudo.substring(0, 150) %>...</p>
-                  <p class="post-meta">
-                      Publicado por 
-                      <strong><%= postagem.autor || "Autor desconhecido" %></strong> 
-                      em <%= postagem.created_at.toLocaleDateString('pt-BR') %>
-                  </p>
-
-                  <a class="btn-leia-mais" href="/posts/<%= postagem.id %>">Ler mais</a>
-
-              </article>
-          <% }) %>
-
+              <form action="/postagens/excluir/<%= p.idPost %>" method="POST" style="display:inline;">
+                <button class="btn btn-sm btn-link text-danger">Excluir</button>
+              </form>
+            <% } %>
+          </div>
+        </div>
       </div>
-
+    <% }) %>
+  <% } else { %>
+    <p>Nenhum post encontrado.</p>
   <% } %>
+</div>
 
-</main>
+<div class="col-md-4">
 
+  <%- include('../partials/sidebar', { usuarios:usuarios }) %>
+</div>
+</div>
+</div>
 <%- include('../partials/footer') %>
-
-</body>
-</html>

@@ -25,6 +25,11 @@ app.use(session({
   cookie: { secure: false } 
 }));
 
+app.use((req, res, next) => {
+    res.locals.session = req.session;
+    next();
+});
+
 app.get('/', (req, res) => {
     res.redirect('/posts');
 });

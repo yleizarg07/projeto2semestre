@@ -8,13 +8,15 @@ const ComentarioModel = require('../models/comentarioModel');
 async function listarPostagens(req, res) {
     try {
         const { id, categoria } = req.query; //requisição do id do usuário, do id da postagem e da categoria
-        let postagens;
+        let postagens;//precisa mudar nome usuario para postagens
 
         if (id) {
             const postagem = await PostModel.findByPk(parseInt(id)); //procura a postagem pelo id
             if (!postagem) {
                 return res.render('pages/index', {
                     error: 'Postagem não encontrada',
+                    usuarios: [],
+                    postagens: [],
                 });
             }
         } else if (categoria) {
@@ -25,7 +27,7 @@ async function listarPostagens(req, res) {
             postagens = await PostModel.findAll();
         }
 
-        return res.render('pages/index', { postagens });
+        return res.render('pages/index', { postagens, usuarios:[] });
     } catch (error) {
         console.error('Erro ao listar postagens:', error);
         return res.render('pages/erro', {
@@ -132,11 +134,11 @@ async function excluirPostagem(req, res) {
 async function pagina(req, res) {
     try {
         const postagens = await PostModel.findAll(); //mostra todas as postagens
-        return res.render('pages/index', { postagens });
+        return res.render('pages/index', { postagens, usuarios:[] });
     } catch (error) {
         console.error('Erro ao carregar postagens:', error);
         return res.render('pages/index', {
-            postagens: [],
+            postagens: [], usuarios:[],
             error: 'Erro ao carregar postagens: ' + error.message,
         });
     }
