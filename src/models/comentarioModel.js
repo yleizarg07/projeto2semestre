@@ -9,7 +9,7 @@ const comentario = database.define('comentario', {
         primaryKey: true
     },
     conteudo: {
-        type: Sequelize.STRING(280),
+        type: Sequelize.STRING(500),
         allowNull: false
     },
    comentPost: {

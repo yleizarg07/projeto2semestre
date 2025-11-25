@@ -24,6 +24,7 @@ const usuario = database.define('usuario', {
         type: Sequelize.STRING(286),
         allowNull: false,
     },
+    
     quanti_post: {
         type: Sequelize.INTEGER,
         allowNull: false,

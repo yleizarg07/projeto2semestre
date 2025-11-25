@@ -13,7 +13,7 @@ async function listarPostagens(req, res) {
         if (id) {
             const postagem = await PostModel.findByPk(parseInt(id)); //procura a postagem pelo id
             if (!postagem) {
-                return res.render('pages/index', {
+                return res.status(404).render('pages/index', {
                     error: 'Postagem não encontrada',
                     usuarios: [],
                     postagens: [],
@@ -30,7 +30,7 @@ async function listarPostagens(req, res) {
         return res.render('pages/index', { postagens, usuarios:[] });
     } catch (error) {
         console.error('Erro ao listar postagens:', error);
-        return res.render('pages/erro', {
+        return res.status(500).render('pages/erro', {
             postagens: [],
             error: 'Erro ao listar postagens: ' + error.message,
         });
@@ -43,19 +43,19 @@ async function criarPostagem(req, res) {
         const { idUsuario } = req.session; //armazena a sessão do usuário
         const { titulo, conteudo, categoria } = req.body; //requere o título, conteúdo e categoria
 
-        if (!idUsuario) return res.redirect('/login'); //verifica se está logado
+        if (!idUsuario) return res.redirect('/usuarios/login'); //verifica se está logado
         if (!conteudo || conteudo.trim() === '') {
-            return res.render('pages/erro', { error: 'Conteúdo da postagem é obrigatório.' });
+            return res.status(400).render('pages/erro', { error: 'Conteúdo da postagem é obrigatório.' });
         }
 
         await PostModel.create({
             titulo, conteudo, categoria, postUsuario: idUsuario
         });
 
-        return res.redirect(`/algo?usuarioId=${idUsuario}`);
+        return res.redirect('/posts');
     } catch (error) {
         console.error('Erro ao criar postagem:', error);
-        return res.render('pages/erro', {
+        return res.status(500).render('pages/erro', {
             error: 'Erro ao criar postagem: ' + error.message,
         });
     }
@@ -68,26 +68,26 @@ async function atualizarPostagem(req, res) {
         const { senha, conteudo, categoria } = req.body; //requere a senha, o conteúdo e a categoria
         const { idUsuario } = req.session; //armazena a sessão do usuário
 
-        if (!idUsuario) return res.redirect('/login'); //verifica se está logado
+        if (!idUsuario) return res.redirect('/usuarios/login'); //verifica se está logado
         if (!conteudo || conteudo.trim() === '') {
-            return res.render('pages/erro', { error: 'Conteúdo da postagem é obrigatório.' });
+            return res.status(400).render('pages/erro', { error: 'Conteúdo da postagem é obrigatório.' });
         }
 
         const postagem = await PostModel.findByPk(parseInt(id)); //busca o post pelo id
         if (!postagem || postagem.postUsuario !== idUsuario) {
-            return res.render('pages/erro', {
+            return res.status(403).render('pages/erro', {
                 error: 'Postagem não encontrada ou você não tem permissão para editá-la.',
             });
         }
 
         const usuario = await UsuarioModel.findByPk(idUsuario); //busca o usuário pelo id
         if (!usuario) {
-            return res.render('pages/erro', { error: 'Erro de sessão. Usuário não encontrado.' });
+            return res.status(401).render('pages/erro', { error: 'Erro de sessão. Usuário não encontrado.' });
         }
 
         const senhaValida = await bcrypt.compare(senha, usuario.senha); //compara as senhas
         if (!senhaValida) {
-            return res.render('pages/erro', { error: 'Senha incorreta para editar a postagem.' });
+            return res.status(401).render('pages/erro', { error: 'Senha incorreta para editar a postagem.' });
         }
 
         await PostModel.update(
@@ -95,10 +95,10 @@ async function atualizarPostagem(req, res) {
             { where: { idPost: parseInt(id) } }
         );
 
-        return res.redirect(`/algo?usuarioId=${idUsuario}`);
+        return res.redirect('/posts');
     } catch (error) {
         console.error('Erro ao editar postagem:', error);
-        return res.render('pages/erro', {
+        return res.status(500).render('pages/erro', {
             error: 'Erro ao editar postagem: ' + error.message,
         });
     }
@@ -110,21 +110,21 @@ async function excluirPostagem(req, res) {
         const { id } = req.params; //requere o id dos parâmetros
         const { idUsuario } = req.session; //armazena a sessão do usuário
 
-        if (!idUsuario) return res.redirect('/login'); //pede para fazer login
+        if (!idUsuario) return res.redirect('/usuarios/login'); //pede para fazer login
 
         const postagem = await PostModel.findByPk(parseInt(id)); //busca por id
         if (!postagem || postagem.postUsuario !== idUsuario) {
-            return res.render('pages/erro', {
+            return res.status(403).render('pages/erro', {
                 error: 'Postagem não encontrada ou você não tem permissão para excluí-la.',
             });
         }
 
         await PostModel.destroy({ where: { idPost: parseInt(id) } }); //remove com a condição where
 
-        return res.redirect(`/algo?usuarioId=${idUsuario}`);
+        return res.redirect('/posts');
     } catch (error) {
         console.error('Erro ao excluir postagem:', error);
-        return res.render('pages/erro', {
+        return res.status(500).render('pages/erro', {
             error: 'Erro ao excluir postagem: ' + error.message,
         });
     }

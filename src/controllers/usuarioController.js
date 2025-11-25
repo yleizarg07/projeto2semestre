@@ -36,6 +36,31 @@ async function listarUsuarios(req, res) {
 }
 
 
+async function listarSocial(req, res) {
+    try {
+        const idUsuario = req.session.idUsuario; //requere o id do usuario logado
+        if (!idUsuario) {
+            return res.status(401).redirect('/usuarios/login');
+        }// se não tiver logado pede login
+        const usuario = await UsuarioModel.findOne({//busca um unico registro e seus atributos do bd
+            where: { idUsuario },
+            attributes: ['relacionamento', 'aniversario', 'idade', 'interesses', 'hobbies', 'estilo', 'animaisEstimacao', 'paixoes', 'humor'] 
+        });
+
+        if (!usuario) {
+            return res.status(404).render('pages/index', { error: 'Usuário não encontrado' });
+        }//caso não encontre o usuario
+
+        return res.status(200).render('pages/perfil', { usuario });//redireciona para o perfil
+    } catch (error) {
+        console.error('Erro ao listar dados sociais:', error);
+        return res.status(500).render('pages/perfil', {
+            error: 'Erro ao listar dados sociais: ' + error.message
+        });//trata o erro
+    }
+}
+
+
 //cria um novo usuario
 async function criarUsuario(req, res) {
     try {
@@ -51,7 +76,7 @@ async function criarUsuario(req, res) {
             quanti_post: 0
         });//cria o usuario
 
-        return res.redirect('/');
+        return res.status(201).redirect('/usuarios');
     } catch (error) {
         console.error('Erro ao criar usuário:', error);
         return res.status(500).render('pages/usuarios', {
@@ -79,10 +104,10 @@ async function criarSocial(req, res) {
             humor: humor
         });//armazena as informações na tabela do usuario
 
-        return res.redirect('/');
+        return res.status(201).redirect('/usuarios');
     } catch (error) {
         console.error('Erro ao criar social do usuário:', error);
-        return res.status(500).render('pages/algo', {
+        return res.status(500).render('pages/perfil', {
             error: 'Erro ao criar social do usuário: ' + error.message
         });
     }
@@ -116,10 +141,10 @@ async function atualizarSocial(req, res) {
             });
         }
 
-        return res.redirect('/algo');
+        return res.status(200).redirect('/usuarios');
     } catch (error) {
         const todosUsuarios = await UsuarioModel.findAll();
-        return res.render('pages/algo', {
+        return res.status(500).render('pages/algo', {
             usuarios: todosUsuarios,
             error: 'Erro ao atualizar informações sociais: ' + error.message
         });
@@ -133,20 +158,20 @@ async function login(req, res) {
 
         const usuarioEncontrado = await UsuarioModel.findOne({ where: { email } });//findOne busca um unico registro no bd
         if (!usuarioEncontrado) {
-            return res.render('pages/login', { error: 'Usuário não encontrado, faça seu cadastro' });
+            return res.status(404).render('pages/login', { error: 'Usuário não encontrado, faça seu cadastro' });
         }
 
         const senhaValida = await bcrypt.compare(senha, usuarioEncontrado.senha);//compara as senhas
         if (!senhaValida) {
-            return res.render('pages/login', { error: 'Senha incorreta' });
+            return res.status(401).render('pages/login', { error: 'Senha incorreta' });
         }
 
         req.session.idUsuario = usuarioEncontrado.idUsuario;
 
-        return res.redirect('/algo');
+        return res.status(200).redirect('/usuarios');
     } catch (error) {
         console.error('Erro ao fazer login:', error);
-        return res.render('pages/login', {
+        return res.status(500).render('pages/login', {
             error: 'Erro ao fazer login: ' + error.message
         });
     }
@@ -175,10 +200,10 @@ async function atualizarUsuario(req, res) {
                 error: 'Usuário não encontrado'
             });
         }
-        return res.redirect('/algo');
+        return res.status(200).redirect('/algo');
     } catch (error) {
         const todosUsuarios = await UsuarioModel.findAll();
-        return res.render('pages/algo', {
+        return res.status(500).render('pages/algo', {
             usuarios: todosUsuarios,
             error: 'Erro ao atualizar usuário: ' + error.message
         });
@@ -195,16 +220,16 @@ async function removerUsuario(req, res) {
 
         if (!removidos) {
             const todosUsuarios = await UsuarioModel.findAll();//mostra tudo
-            return res.render('pages/algo', {
+            return res.status(404).render('pages/algo', {
                 usuarios: todosUsuarios,
                 error: 'Usuário não encontrado'
             });
         }
 
-        return res.redirect('/algo');
+        return res.status(200).redirect('/');
     } catch (error) {
         const todosUsuarios = await UsuarioModel.findAll();//mostra tudo
-        return res.render('pages/algo', {
+        return res.status(500).render('pages/index', {
             usuarios: todosUsuarios,
             error: 'Erro ao remover usuário: ' + error.message
         });
@@ -225,6 +250,11 @@ async function paginaUsuario(req, res) {
     }
 }
 
+// renderiza a página de login 
+function mostraLogin(req, res) {
+    return res.status(200).render('pages/login');
+}
+
 module.exports = {
     listarUsuarios,
     criarUsuario,
@@ -233,5 +263,6 @@ module.exports = {
     atualizarUsuario,
     removerUsuario,
     login,
-    pagina: paginaUsuario
+    pagina: paginaUsuario,
+    mostraLogin
 };
