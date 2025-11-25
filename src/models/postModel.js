@@ -9,11 +9,11 @@ const Post = database.define('post', {
         primaryKey: true
     },
     titulo: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.STRING(250),
         allowNull: false
     },
     conteudo: {
-        type: Sequelize.STRING(280),
+        type: Sequelize.STRING(500),
         allowNull: false
     },
    postUsuario: {
