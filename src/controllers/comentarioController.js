@@ -1,6 +1,6 @@
 const comentarioModel = require('../models/comentarioModel');
 const postModel = require('../models/postModel');
-const usuarioModel = require('../models/usuarioModel');
+const UsuarioModel = require('../models/usuarioModel');
 const bcrypt = require('bcryptjs');
 
 //lista comentários e pode filtrar por categoria ou id do post
@@ -24,9 +24,9 @@ async function listarComentarios(req, res) { //async faz com que o a função n�
             comentarios = await comentarioModel.findAll();
         }// se não ele só retorna tudo
 
-        res.render('pages/comentarios', { comentarios });
+        return res.status(200).render('pages/comentarios', { comentarios });
     } catch (error) {
-        res.render('pages/comentarios', {
+        return res.status(500).render('pages/comentarios', {
             comentarios: [],
             error: 'Erro ao listar comentários: ' + error.message
         });
@@ -40,18 +40,18 @@ async function criarComentario(req, res) {
         const { idPost, conteudo } = req.body; //requere os dados enviados do usuario na requisição put ou post, aqui as inforações do post
 
         if (!idUsuario) {
-            return res.redirect('/login');
+            return res.redirect('/usuarios/login');
         }//se o id do usuario for diferente ele pede para logar
 
         if (!conteudo || conteudo.trim() === '' || !idPost) {
-            return res.render('pages/criarComentario', {
+            return res.status(400).render('pages/criarComentario', {
                 error: 'Conteúdo e ID da Postagem são obrigatórios.'
             });// verifica se os campos foram preenchidos
         }
 
         const postagem = await postModel.findByPk(parseInt(idPost));
         if (!postagem) {
-            return res.render('pages/criarComentario', {
+            return res.status(404).render('pages/criarComentario', {
                 error: 'Postagem não encontrada.'
             });
         }//findbypk busca o post pelo id
@@ -64,7 +64,7 @@ async function criarComentario(req, res) {
 
         return res.redirect(`/postagem/${idPost}`);//redireciona para a pagina com o id do post
     } catch (error) {
-        res.render('pages/erro', {
+        return res.status(500).render('pages/erro', {
             error: 'Erro ao criar comentário: ' + error.message
         });
     }
@@ -78,35 +78,35 @@ async function atualizarComentario(req, res) {
         const { idUsuario } = req.session;//armazena od dados da sessão do usuario
 
         if (!idUsuario) {
-            return res.redirect('/login');
+            return res.redirect('/usuarios/login');
         }//caso o id do usuario for diferente, pede para ele logar
 
         if (!conteudo || conteudo.trim() === '') {
-            return res.render('pages/erro', { error: 'Conteúdo é obrigatório.' });
+            return res.status(400).render('pages/erro', { error: 'Conteúdo é obrigatório.' });
         }//verfica se o campo foi preenchido
 
         const comentario = await comentarioModel.findByPk(parseInt(id));//busca o comentario pelo id
         if (!comentario || comentario.comentUsua !== idUsuario) {
-            return res.render('pages/erro', {
+            return res.status(403).render('pages/erro', {
                 error: 'Comentário não encontrado ou sem permissão.'
             });//verifica se o comentario existe  e se o id do usuareio é o mesmo que criou o comenatrio, verificando a permissão
         }
 
-        const usuario = await usuarioModel.findByPk(idUsuario); //busca usuario pelo id
+        const usuario = await UsuarioModel.findByPk(idUsuario); //busca usuario pelo id
         if (!usuario) {
-            return res.render('pages/erro', { error: 'Erro de sessão. Usuário não encontrado.' });
+            return res.status(401).render('pages/erro', { error: 'Erro de sessão. Usuário não encontrado.' });
         }//verifica o id do usuario
 
         const senhaValida = await bcrypt.compare(senha, usuario.senha);
         if (!senhaValida) {
-            return res.render('pages/erro', { error: 'Senha incorreta.' });
+            return res.status(401).render('pages/erro', { error: 'Senha incorreta.' });
         }//compara as senhas, a dada pelo usuario e a armazanada, e verifica se está certa
 
         await comentario.update({ conteudo: conteudo });//atualiza de fato o conteudo
 
         return res.redirect(`/postagem/${comentario.comentPost}`);//redireciona para a pagina de postagem com o comentario atualizado
     } catch (error) {
-        res.render('pages/erro', {
+        return res.status(500).render('pages/erro', {
             error: 'Erro ao atualizar comentário: ' + error.message
         });
     }
@@ -119,12 +119,12 @@ async function excluirComentario(req, res) {
         const { idUsuario } = req.session;//armazena a ssession do usuario
 
         if (!idUsuario) {
-            return res.redirect('/login');
+            return res.redirect('/usuarios/login');
         }//pede para fazer lohin se mão estiver logado
 
         const comentario = await comentarioModel.findByPk(parseInt(id));//busca comentario pelo id
         if (!comentario || comentario.comentUsua !== idUsuario) { //verifica se o comentario existe ou se o usuario, pelo id, pode apagar ou não
-            return res.render('pages/erro', {
+            return res.status(403).render('pages/erro', {
                 error: 'Comentário não encontrado ou sem permissão.'
             });
         }
@@ -134,7 +134,7 @@ async function excluirComentario(req, res) {
 
         return res.redirect(`/postagem/${idPost}`);
     } catch (error) {
-        res.render('pages/erro', {
+        return res.status(500).render('pages/erro', {
             error: 'Erro ao excluir comentário: ' + error.message
         });
     }
