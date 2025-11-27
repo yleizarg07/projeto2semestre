@@ -1,47 +1,36 @@
-<!--<%- include('../partials/head') %>
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
 
-<div class="container mt-5" style="max-width: 400px;">
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 75vh;">
+    <div class="card shadow p-4" style="max-width: 400px; width: 100%; border-radius: 15px;">
 
-    <h3 class="mb-4 text-center">Login</h3>
-
-    <% if (error) { %>
-        <div class="alert alert-danger"><%= error %></div>
-    <% } %>
-
-    <form action="/usuarios/login" method="POST">
-
-        <div class="form-group mb-3">
-            <label>Email</label>
-            <input type="email" name="email" class="form-control" required>
+        <div class="text-center mb-3">
+            <img src="images/logo.png" alt="logo" width="80" class="rounded-circle mb-2">
+            <h3 class="fw-bold" style="color:#b98c78;">Entrar</h3>
         </div>
 
-        <div class="form-group mb-3">
-            <label>Senha</label>
-            <input type="password" name="senha" class="form-control" required>
-        </div>
+        <form action="/usuarios/login" method="POST">
+            <div class="mb-3">
+                <label for="email" class="form-label fw-semibold">Email</label>
+                <input type="email" class="form-control" name="email" id="email" required>
+            </div>
 
-        <button class="btn btn-primary w-100">Entrar</button>
+            <div class="mb-3">
+                <label for="senha" class="form-label fw-semibold">Senha</label>
+                <input type="password" class="form-control" name="senha" id="senha" required>
+            </div>
 
-    </form>
+            <button class="btn btn-primary w-100 mt-2">Entrar</button>
+        </form>
 
-</div>-->
-<%include ../partials/head %>
-<%include('partials/header.ejs')%>
-
-<h2 class="page-title">Login</h2>
-
-<div class="login-form">
-    <form action="/login" method="POST">
-        <div class="user-input"><input type="email" name="emailInput" placeholder="email">
-        <div class="pass-input"></div><input type="password" name="senhaInput" placeholder="senha">
-        <div align="center"><button type="submit" class="btn btn-primary">Login</button></div>
-    </form>
+        <p class="text-center mt-3">
+            Não tem conta?
+            <a href="/cadastro" class="text-primary fw-semibold">Criar conta</a>
+        </p>
+    </div>
 </div>
 
-
-
-
-<%include('partials/footer.ejs')%>
+<%- include('../partials/footer') %>
 
 
 

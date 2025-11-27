@@ -1,0 +1,44 @@
+.footer-fixo {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #f8f9fa;          /* cor clara */
+  text-align: center;
+  padding: 10px 0;
+  border-top: 1px solid #ddd;   /* linha superior */
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+  z-index: 999;
+}
+
+.login-card {
+            width: 350px;
+            padding: 25px;
+            border-radius: 15px;
+            background: #fff;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        h2 {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .link {
+            text-decoration: none;
+            color: #0d6efd;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
