@@ -100,11 +100,11 @@ async function criarUsuario(req, res) {
             quanti_post: 0
         }); 
         //redireciona para a lista de usuários
-        return res.status(201).redirect('/usuarios');
+        return res.status(201).redirect('/usuarios/login');
     } catch (error) {
         //em caso de erro ele loga no servidor e renderiza a view de usuários com mensagem
         console.error('Erro ao criar usuário:', error);
-        return res.status(500).render('pages/usuarios', {
+        return res.status(500).render('pages/cadastro', {
             error: 'Erro ao criar usuário: ' + error.message
         });
     }
@@ -240,7 +240,11 @@ async function paginaUsuario(req, res) {
 
 //renderiza a página de login 
 function mostraLogin(req, res) {
-    return res.status(200).render('pages/login');
+    return res.status(200).render('pages/login', { error: null });
+}
+
+function mostraCadastro(req, res) {
+    return res.status(200).render('pages/cadastro', { error: null });
 }
 
 module.exports = {
@@ -250,7 +254,9 @@ module.exports = {
     atualizarSocial,
     atualizarUsuario,
     removerUsuario,
+    listarSocial,
     login,
     pagina: paginaUsuario,
-    mostraLogin
+    mostraLogin,
+    mostraCadastro
 };

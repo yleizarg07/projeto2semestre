@@ -2,14 +2,14 @@
   <div class="container">
     <a class="navbar-brand d-flex align-items-center" href="/">
     <img 
-      src="images/logo.jpg" 
+      src="/images/logo.jpg" 
       alt="Logo" 
       width="60" 
       height="60" 
       class="rounded-circle me-2"
-      border-radius="50%";
-      border="2px solid #fff";
-      box-shadow="0 1px 6px #5d4a40;"
+      style='border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 1px 6px #5d4a40;'
     >
     <span class="fs-3 fw-bold" 
       style="background: linear-gradient(90deg, #472518, #b98c78); 
@@ -33,7 +33,7 @@
   <div class="d-flex align-items-center">
     <% if (session && session.idUsuario) { %>
       <!-- aqui poderia ter link pro perfil real -->
-      <a href="/perfil" class="btn btn-outline-secondary btn-sm">Perfil</a>
+      <a href="/usuarios/perfil" class="btn btn-outline-secondary btn-sm">Perfil</a>
     <% } else { %>
       <a href="/usuarios/login" class="btn btn-primary btn-sm">Entrar</a>
     <% } %>

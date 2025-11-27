@@ -8,6 +8,9 @@ router.get('/', usuarioController.pagina);
 // Página de login
 router.get('/login', usuarioController.mostraLogin);
 
+// Página de cadastro
+router.get('/cadastro', usuarioController.mostraCadastro);
+
 // Listar usuários (todos ou por ID via query ?id=)
 router.get('/listar', usuarioController.listarUsuarios);
 

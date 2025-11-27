@@ -6,11 +6,11 @@
 <div class="d-flex align-items-center mb-2">
 
     <!-- Avatar padrão-->
-<img src="images/perfil.jpg" alt="avatar" width="40" class="rounded-circle me-2">
+<img src="/images/perfil.jpg" alt="avatar" width="40" class="rounded-circle me-2">
 <a href="/usuarios?nomeUsuario=<%= u.nome_usuario %>"><%= u.nome %></a>
 </div>
 <% }) %>
-<a href="usuarios" class="d-block mt-2">Ver tudo</a>
+<a href="/usuarios" class="d-block mt-2">Ver tudo</a>
 <% } else { %>
 <p class="text-muted">Nenhum usuário cadastrado.</p>
 <% } %>
