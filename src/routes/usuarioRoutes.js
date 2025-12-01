@@ -11,6 +11,9 @@ router.get('/login', usuarioController.mostraLogin);
 // Página de cadastro
 router.get('/cadastro', usuarioController.mostraCadastro);
 
+// Página de dados sociais
+router.get('/social', usuarioController.mostrarSocial);
+
 // Listar usuários (todos ou por ID via query ?id=)
 router.get('/listar', usuarioController.listarUsuarios);
 

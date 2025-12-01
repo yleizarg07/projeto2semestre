@@ -247,6 +247,10 @@ function mostraCadastro(req, res) {
     return res.status(200).render('pages/cadastro', { error: null });
 }
 
+function mostrarSocial(req, res) {
+    return res.status(200).render('pages/socialUsuario', { error: null });
+}
+
 module.exports = {
     listarUsuarios,
     criarUsuario,
@@ -258,5 +262,6 @@ module.exports = {
     login,
     pagina: paginaUsuario,
     mostraLogin,
-    mostraCadastro
+    mostraCadastro,
+    mostrarSocial
 };
