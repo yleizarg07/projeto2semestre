@@ -190,6 +190,19 @@ async function login(req, res) {
     }
 }
 
+async function logout(req, res) {
+    try {
+        // destrói a sessão do usuário
+        req.session.destroy();    
+        // redireciona para a página de principal 
+        return res.status(200).redirect('/');
+    } catch (error) {
+        console.error('Erro ao fazer logout:', error);
+        return res.status(500).render('pages/erro', { error: 'Erro ao fazer logout: ' + error.message 
+        });
+    }
+}
+
 async function atualizarUsuario(req, res) {
     try {
         const { id } = req.params; //id do usuário na rota
@@ -270,6 +283,10 @@ async function buscarUsuarios(req, res) {
 }
 
 
+function mostrarSocial(req, res) {
+    return res.status(200).render('pages/socialUsuario', { error: null });
+}
+
 module.exports = {
     listarUsuarios,
     criarUsuario,
@@ -282,5 +299,7 @@ module.exports = {
     pagina: paginaUsuario,
     mostraLogin,
     mostraCadastro,
-    buscarUsuarios
+    buscarUsuarios,
+    mostrarSocial,
+    logout
 };
