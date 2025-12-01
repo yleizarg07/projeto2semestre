@@ -28,4 +28,7 @@ router.get('/editar/:id', async (req, res) => {
 router.post('/editar/:id', postController.atualizarPostagem);
 router.post('/excluir/:id', postController.excluirPostagem);
 
+router.get('/:id', postController.exibirPost);
+
+
 module.exports = router;

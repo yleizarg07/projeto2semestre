@@ -181,10 +181,50 @@ async function pagina(req, res) {
     }
 }
 
+async function exibirPost(req, res) {
+    try {
+        const { id } = req.params;
+
+        const postagem = await PostModel.findByPk(parseInt(id));
+        if (!postagem) {
+            return res.status(404).render('pages/erro', { error: 'Postagem não encontrada.' });
+        }
+
+        const usuario = await UsuarioModel.findByPk(postagem.postUsuario);
+
+        const comentarios = await ComentarioModel.findAll({
+            where: { comentPost: parseInt(id) },
+            order: [['idComentario', 'DESC']] });
+
+        const comentariosView = await Promise.all(
+            comentarios.map(async (c) => {
+                const u = await UsuarioModel.findByPk(c.comentUsua, {
+                    attributes: ['nome_usuario']
+                });
+                 return {
+                    conteudo: c.conteudo,
+                    nomeUsuario: u ? u.nome_usuario : 'Anônimo'
+                };
+            })
+        );
+
+        return res.render('pages/post', {
+            postagem,
+            usuario,
+            comentarios: comentariosView
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).render('pages/erro', { error: 'Erro ao carregar postagem.' });
+    }
+}
+
 module.exports = {
     listarPostagens,
     criarPostagem,
     atualizarPostagem,
     excluirPostagem,
     pagina,
+    exibirPost
 };

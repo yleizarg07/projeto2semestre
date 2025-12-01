@@ -32,4 +32,7 @@ router.post('/remover/:id', usuarioController.removerUsuario);
 // Login
 router.post('/login', usuarioController.login);
 
+// Buscar usuários por nome
+router.get('/buscar', usuarioController.buscarUsuarios);
+
 module.exports = router;

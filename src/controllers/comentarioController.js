@@ -85,7 +85,7 @@ async function criarComentario(req, res) {
         await comentarioModel.create({ conteudo: conteudo, comentPost: parseInt(idPost), comentUsua: idUsuario });
         
         //redireciona para a listagem de posts
-        return res.redirect('/posts');
+        return res.redirect(`/posts/${idPost}`);
     } catch (error) {
         //em caso de erro ele loga e renderiza página de erro
         console.error('Erro ao criar comentário:', error);
@@ -122,7 +122,7 @@ async function atualizarComentario(req, res) {
         await comentario.update({ conteudo: conteudo });
         
         //redireciona para a listagem de posts
-        return res.redirect('/posts');
+        return res.redirect(`/posts/${comentario.comentPost}`);
     } catch (error) {
         //em caso de erro ele loga e renderiza página de erro
         console.error('Erro ao atualizar comentário:', error);
@@ -148,7 +148,7 @@ async function excluirComentario(req, res) {
         await comentario.destroy();
         
         //redireciona para a listagem de posts
-        return res.redirect('/posts');
+        return res.redirect(`/posts/${comentario.comentPost}`);
     } catch (error) {
         //em caso de erro ele loga e renderiza página de erro
         console.error('Erro ao excluir comentário:', error);

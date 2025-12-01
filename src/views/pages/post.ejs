@@ -1,0 +1,92 @@
+<%- include('../partials/head') %> 
+<%- include('../partials/header') %>
+
+<div class="container mt-5">
+
+    <!-- POSTAGEM -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center mb-2">
+            <img src="/images/perfil.jpg" width="48" class="rounded-circle me-3">
+            <div>
+                <strong>@<%= usuario.nome_usuario %></strong><br>
+                <small class="text-muted"><%= postagem.categoria || 'Geral' %></small>
+            </div>
+            </div>
+            <h3 class="card-title"><%= postagem.titulo %></h3>
+
+            <p class="card-text"><%= postagem.conteudo %></p>
+
+            <a href="/posts" class="btn btn-outline-secondary mt-3">
+                Voltar
+            </a>
+        </div>
+    </div>
+
+    <!-- FORMULÁRIO DE COMENTÁRIO -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Comentar</h5>
+        </div>
+
+        <div class="card-body">
+            <form action="/comentarios/criar" method="POST">
+                <input type="hidden" name="idPost" value="<%= postagem.idPost %>">
+
+                <textarea 
+                    name="conteudo" 
+                    class="form-control" 
+                    rows="3" 
+                    placeholder="Escreva seu comentário..."
+                    required
+                ></textarea>
+
+                <button class="btn btn-primary mt-3">Enviar comentário</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- LISTA DE COMENTÁRIOS -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Comentários</h5>
+        </div>
+
+        <div class="card-body">
+
+            <% if (comentarios && comentarios.length > 0) { %>
+
+                <% comentarios.forEach(c => { %>
+
+                    <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
+
+                        <!-- FOTO DO USUÁRIO -->
+                        <img 
+                            src="/images/perfil.jpg"
+                            class="rounded-circle me-3"
+                            width="50"
+                            height="50"
+
+                        >
+
+                        <!-- CONTEÚDO DO COMENTÁRIO -->
+                        <div>
+                            <strong>@<%= c.nomeUsuario %></strong>
+                            <p class="mb-1"><%= c.conteudo %></p>
+                        </div>
+
+                    </div>
+
+                <% }) %>
+
+            <% } else { %>
+                <p class="text-muted">Nenhum comentário ainda. Seja o primeiro!</p>
+            <% } %>
+
+        </div>
+    </div>
+
+</div>
+
+<%- include('../partials/footer') %>
+

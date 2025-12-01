@@ -247,6 +247,29 @@ function mostraCadastro(req, res) {
     return res.status(200).render('pages/cadastro', { error: null });
 }
 
+async function buscarUsuarios(req, res) {
+    try {
+        const { nome } = req.query;
+        if (!nome || nome.trim() === "") {
+            return res.render('pages/buscaUsuarios', { usuarios: [], nome, error: "Digite um nome para buscar." });
+        }
+        const { Op } = require('sequelize');
+        const usuarios = await UsuarioModel.findAll({
+            where: {
+                nome_usuario: {
+                    [Op.like]: `%${nome}%`
+                }
+            },
+            attributes: ['idUsuario', 'nome', 'nome_usuario']
+        });
+        return res.render('pages/buscaUsuarios', { usuarios, nome, error: null });
+    } catch (error) {
+        console.error("Erro na busca:", error);
+        return res.status(500).render('pages/buscaUsuarios', { usuarios: [], nome: "", error: "Erro ao buscar usuários." });
+    }
+}
+
+
 module.exports = {
     listarUsuarios,
     criarUsuario,
@@ -258,5 +281,6 @@ module.exports = {
     login,
     pagina: paginaUsuario,
     mostraLogin,
-    mostraCadastro
+    mostraCadastro,
+    buscarUsuarios
 };
