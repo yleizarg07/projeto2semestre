@@ -16,14 +16,88 @@
             <input type="text" name="nomeUsuario" class="form-control" value="<%= usuario.nome_usuario %>" required>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Nova Senha (opcional)</label>
-            <input type="password" name="senha" class="form-control">
+        <!-- Campo de senha com ícone -->
+        <div class="mb-3 position-relative">
+            <label for="senha" class="form-label">Nova Senha</label>
+
+            <input 
+                type="password" 
+                class="form-control" 
+                id="senha" 
+                name="senha"
+                placeholder="Digite a nova senha"
+                style="padding-right: 40px;"
+            >
+
+            <i 
+                class="bi bi-eye-slash"
+                id="toggleSenha"
+                style="
+                    position: absolute;
+                    top: 70%;
+                    right: 10px;
+                    transform: translateY(-50%);
+                    cursor: pointer;
+                    font-size: 1.2rem;
+                    color: #6c757d;
+                "
+            ></i>
         </div>
 
         <button type="submit" class="btn btn-primary">Salvar alterações</button>
-    </form>
 
+        <!-- Botão que abre o modal -->
+        <button 
+            type="button" 
+            class="btn btn-danger ms-2" 
+            data-bs-toggle="modal" 
+            data-bs-target="#modalExcluir">
+            Excluir Usuário
+        </button>
+    </form>
+</div>
+
+<!-- MODAL DE CONFIRMAÇÃO -->
+<div class="modal fade" id="modalExcluir" tabindex="-1" aria-labelledby="modalExcluirLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalExcluirLabel">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                Tem certeza que deseja <strong>excluir este usuário</strong>?  
+                Esta ação é permanente e não pode ser desfeita.
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+                <form action="/usuarios/excluir/<%= usuario.idUsuario %>" method="POST">
+                    <button type="submit" class="btn btn-danger">Excluir Usuário</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
 </div>
 
 <%- include('../partials/footer') %>
+
+<script>
+document.getElementById("toggleSenha").addEventListener("click", function () {
+    const senhaInput = document.getElementById("senha");
+
+    if (senhaInput.type === "password") {
+        senhaInput.type = "text";
+        this.classList.remove("bi-eye-slash");
+        this.classList.add("bi-eye");
+    } else {
+        senhaInput.type = "password";
+        this.classList.remove("bi-eye");
+        this.classList.add("bi-eye-slash");
+    }
+});
+</script>
