@@ -6,7 +6,6 @@ const comentarioRoutes = require('./routes/comentarioRoutes')
 const path = require('path');
 const session = require('express-session');
 
-require('./models/associations');
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));

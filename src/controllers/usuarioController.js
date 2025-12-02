@@ -88,6 +88,12 @@ async function criarUsuario(req, res) {
         //são campos enviados pelo formulário:
         const { nome, email, nomeUsuario, senha } = req.body; //requere os envios do usuario
 
+        // incluir um novo campo repetir senha
+        // comparar senha == repetirsenha
+        // se for diferente, alerta, foco no campo senha
+        // se for igual, criptografa ou salva apenas a senha
+
+
         //hashedSenha é aversão criptografada da senha, a impressão digital
         const hashedSenha = await bcrypt.hash(senha, 10); //põe a impressão digital na senha
 
