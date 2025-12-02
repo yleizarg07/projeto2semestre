@@ -47,44 +47,44 @@
     </div>
 
     <!-- LISTA DE COMENTÁRIOS -->
-    <div class="card shadow-sm">
-        <div class="card-header bg-secondary text-white">
-            <h5 class="mb-0">Comentários</h5>
-        </div>
-
-        <div class="card-body">
-
-            <% if (comentarios && comentarios.length > 0) { %>
-
-                <% comentarios.forEach(c => { %>
-
-                    <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
-
-                        <!-- FOTO DO USUÁRIO -->
-                        <img 
-                            src="/images/perfil.jpg"
-                            class="rounded-circle me-3"
-                            width="50"
-                            height="50"
-
-                        >
-
-                        <!-- CONTEÚDO DO COMENTÁRIO -->
-                        <div>
-                            <strong>@<%= c.nomeUsuario %></strong>
-                            <p class="mb-1"><%= c.conteudo %></p>
-                        </div>
-
-                    </div>
-
-                <% }) %>
-
-            <% } else { %>
-                <p class="text-muted">Nenhum comentário ainda. Seja o primeiro!</p>
-            <% } %>
-
-        </div>
+<div class="card shadow-sm">
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0">Comentários</h5>
     </div>
+
+<div class="card-body">
+
+<% if (comentarios && comentarios.length > 0) { %>
+
+    <% comentarios.forEach(c => { %>
+
+        <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
+
+            <!-- FOTO DO USUÁRIO -->
+            <img 
+                src="/images/perfil.jpg"
+                class="rounded-circle me-3"
+                width="50"
+                height="50"
+
+            >
+
+            <!-- CONTEÚDO DO COMENTÁRIO -->
+            <div>
+                <strong>@<%= c.nomeUsuario %></strong>
+                <p class="mb-1"><%= c.conteudo %></p>
+            </div>
+
+        </div>
+
+    <% }) %>
+
+    <% } else { %>
+        <p class="text-muted">Nenhum comentário ainda. Seja o primeiro!</p>
+    <% } %>
+
+    </div>
+</div> 
 
 </div>
 

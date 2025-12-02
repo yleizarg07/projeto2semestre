@@ -9,35 +9,35 @@
 <h3>Últimos Posts</h3>
 </div>
 
-  <% if (postagens && postagens.length > 0) { %>
-    <% postagens.forEach(p => { %>
-      <div class="card mb-3">
-        <div class="card-body">
-          <div class="d-flex align-items-center mb-2">
-            <img src="images/perfil.jpg" width="48" class="rounded-circle me-3">
-            <div>
-              <strong>@<%= p.nomeUsuario %></strong><br>
-              <small class="text-muted"><%= p.categoria || 'Geral' %></small>
-            </div>
-          </div>
-
-          <h5><%= p.titulo %></h5>
-          <p><%= p.conteudo %></p>
-
-          <div>
-            <a href="/posts/<%= p.idPost %>" class="me-3">Ver</a>
-            <% if (session && session.idUsuario === p.postUsuario) { %>
-              <a href="/posts/editar/<%= p.idPost %>" class="me-2">Editar</a>
-
-              <form action="/posts/excluir/<%= p.idPost %>" method="POST" style="display:inline;">
-                <button class="btn btn-sm btn-link text-danger">Excluir</button>
-              </form>
-            <% } %>
-          </div>
+<% if (postagens && postagens.length > 0) { %>
+<% postagens.forEach(p => { %>
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="d-flex align-items-center mb-2">
+      <img src="images/perfil.jpg" width="48" class="rounded-circle me-3">
+      <div>
+          <strong>@<%= p.nomeUsuario %></strong><br>
+          <small class="text-muted"><%= p.categoria || 'Geral' %></small>
         </div>
       </div>
-    <% }) %>
-  <% } else { %>
+
+      <h5><%= p.titulo %></h5>
+      <p><%= p.conteudo %></p>
+
+      <div>
+        <a href="/posts/<%= p.idPost %>" class="me-3">Ver</a>
+        <% if (session && session.idUsuario === p.postUsuario) { %>
+          <a href="/posts/editar/<%= p.idPost %>" class="me-2">Editar</a>
+
+          <form action="/posts/excluir/<%= p.idPost %>" method="POST" style="display:inline;">
+            <button class="btn btn-sm btn-link text-danger">Excluir</button>
+          </form>
+        <% } %>
+      </div>
+    </div>
+  </div>
+<% }) %>
+<% } else { %>
     <p>Nenhum post encontrado.</p>
   <% } %>
 </div>

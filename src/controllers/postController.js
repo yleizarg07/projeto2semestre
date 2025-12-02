@@ -109,7 +109,7 @@ async function atualizarPostagem(req, res) {
         //identificador da postagem na rota 
         const { id } = req.params;
         //senha, conteudo, categoria campos enviados no formulário
-        const { senha, conteudo, categoria } = req.body;
+        const { titulo, conteudo, categoria } = req.body;
         //id do usuário armazenado na sessão
         const { idUsuario } = req.session;
 
@@ -122,17 +122,8 @@ async function atualizarPostagem(req, res) {
         const postagem = await PostModel.findByPk(parseInt(id));
         //verifica se postagem existe e se o usuário logado é o dono 
         if (!postagem || postagem.postUsuario !== idUsuario) return res.status(403).render('pages/erro', { error: 'Postagem não encontrada ou sem permissão.' });
-
-        //busca os dados completos do usuário 
-        const usuario = await UsuarioModel.findByPk(idUsuario);
-        if (!usuario) return res.status(401).render('pages/erro', { error: 'Erro de sessão. Usuário não encontrado.' });
-
-        //compara a senha fornecida com a impressão digital armazenado no banco
-        const senhaValida = await bcrypt.compare(senha, usuario.senha);
-        if (!senhaValida) return res.status(401).render('pages/erro', { error: 'Senha incorreta para editar a postagem.' });
-
         //atualiza a postagem no banco e usa categoria enviada ou mantém a categoria anterior se não for alterada
-        await PostModel.update({ conteudo, categoria: categoria || postagem.categoria }, { where: { idPost: parseInt(id) } });
+        await PostModel.update({ titulo, conteudo, categoria: categoria || postagem.categoria }, { where: { idPost: parseInt(id) } });
         
         //redireciona para a listagem de posts
         return res.redirect('/posts');
@@ -202,6 +193,8 @@ async function exibirPost(req, res) {
                     attributes: ['nome_usuario']
                 });
                  return {
+                    idComentario: c.idComentario,
+                    idUsuario: c.comentUsua,
                     conteudo: c.conteudo,
                     nomeUsuario: u ? u.nome_usuario : 'Anônimo'
                 };

@@ -20,7 +20,7 @@ async function listarComentarios(req, res) {
     try {
         //extrai os parametros de filtro da query string
         const { categoria, idPost } = req.query;
-
+        let where = {};
         //monta objeto where para o bd
         if (idPost) where.comentPost = parseInt(idPost); //filtra comentários de um post específico
 
@@ -97,7 +97,7 @@ async function atualizarComentario(req, res) {
     try {
         //identificador do comentário na rota 
         const { id } = req.params;
-        const { senha, conteudo } = req.body;
+        const {conteudo } = req.body;
         const { idUsuario } = req.session;
 
         //valida se usuário está logado
@@ -109,14 +109,6 @@ async function atualizarComentario(req, res) {
         const comentario = await comentarioModel.findByPk(parseInt(id));
         //verifica se existe e se o usuário logado é o dono 
         if (!comentario || comentario.comentUsua !== idUsuario) return res.status(403).render('pages/erro', { error: 'Comentário não encontrado ou sem permissão.' });
-
-        //busca os dados completos do usuário 
-        const usuario = await UsuarioModel.findByPk(idUsuario);
-        if (!usuario) return res.status(401).render('pages/erro', { error: 'Erro de sessão. Usuário não encontrado.' });
-
-        //compara a senha fornecida com a impressão digital armazenado no bd
-        const senhaValida = await bcrypt.compare(senha, usuario.senha);
-        if (!senhaValida) return res.status(401).render('pages/erro', { error: 'Senha incorreta.' });
 
         //atualiza o comentário no banco 
         await comentario.update({ conteudo: conteudo });
