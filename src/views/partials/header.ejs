@@ -24,15 +24,16 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-
-
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
   <ul class="navbar-nav me-auto mb-2 mb-lg-0">
     <li class="nav-item"><a class="nav-link" href="/">Início</a></li>
 
     <li class="nav-item"><a class="nav-link" href="/posts/criar">Criar Post</a></li>
+  
+  <% if (session && session.idUsuario) { %>
+      <li class="nav-item"><a class="nav-link" href="/usuarios/logout">Logout</a></li>
+    <% } %>
   </ul>
-
   <div class="d-flex align-items-center">
     
     <form class="d-flex me-2" role="search" action="/usuarios/buscar" method="GET">
@@ -42,7 +43,7 @@
 
     <% if (session && session.idUsuario) { %>
       <!-- aqui poderia ter link pro perfil real -->
-      <a href="/usuarios/perfil"><img src="/images/perfil.jpg" alt="avatar" width="45" class="rounded-circle me-2" style='border-radius: 50%;
+      <a href="/usuarios/social"><img src="/images/perfil.jpg" alt="avatar" width="45" class="rounded-circle me-2" style='border-radius: 50%;
       border: 2px solid #fff;
       box-shadow: 0 1px 6px #5d4a40;'></a>
     <% } else { %>

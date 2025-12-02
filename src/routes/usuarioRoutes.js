@@ -38,4 +38,7 @@ router.post('/login', usuarioController.login);
 // Buscar usuários por nome
 router.get('/buscar', usuarioController.buscarUsuarios);
 
+//logout
+router.get('/logout', usuarioController.logout);
+
 module.exports = router;
