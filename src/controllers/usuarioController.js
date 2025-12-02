@@ -163,6 +163,9 @@ async function login(req, res) {
     try {
         //campos do formulário de login
         const { email, senha } = req.body; //requere o email e a senha enviados pelo usuario
+        
+
+        const hashedSenha = await bcrypt.hash(senha, 10); //põe a impressão digital na senha
 
         // busca usuário por email
         const usuarioEncontrado = await UsuarioModel.findOne({ where: { email } }); //findOne busca um unico registro no bd
@@ -172,7 +175,7 @@ async function login(req, res) {
         }
 
         //compara senha enviada com o hash armazenado
-        const senhaValida = await bcrypt.compare(senha, usuarioEncontrado.senha); //compara as senhas
+        const senhaValida = await bcrypt.compare(hashedSenha, usuarioEncontrado.senha); //compara as senhas
         if (!senhaValida) {
             return res.status(401).render('pages/login', { error: 'Senha incorreta' });
         }
