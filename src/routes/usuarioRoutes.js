@@ -41,4 +41,7 @@ router.get('/buscar', usuarioController.buscarUsuarios);
 //logout
 router.get('/logout', usuarioController.logout);
 
+router.get('/editar', usuarioController.mostraEditarUsuario);
+
+
 module.exports = router;

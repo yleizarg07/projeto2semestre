@@ -170,8 +170,7 @@ async function login(req, res) {
         //campos do formulário de login
         const { email, senha } = req.body; //requere o email e a senha enviados pelo usuario
         
-
-        const hashedSenha = await bcrypt.hash(senha, 10); //põe a impressão digital na senha
+        const hashedSenha = senha; //aqui a senha já vem criptografada do front-end
 
         // busca usuário por email
         const usuarioEncontrado = await UsuarioModel.findOne({ where: { email } }); //findOne busca um unico registro no bd
@@ -296,6 +295,24 @@ function mostrarSocial(req, res) {
     return res.status(200).render('pages/socialUsuario', { error: null });
 }
 
+async function mostraEditarUsuario(req, res) {
+    try {
+        const idUsuario = req.session.idUsuario;
+        if (!idUsuario) return res.redirect('/usuarios/login');
+
+        const usuario = await UsuarioModel.findOne({
+            where: { idUsuario },
+            attributes: ['idUsuario', 'nome', 'nome_usuario']
+        });
+
+        return res.render('pages/editarUsuario', { usuario });
+    } catch (error) {
+        console.error('Erro ao carregar edição de usuário:', error);
+        return res.status(500).render('pages/erro', { error: 'Erro ao carregar edição' });
+    }
+}
+
+
 module.exports = {
     listarUsuarios,
     criarUsuario,
@@ -310,5 +327,6 @@ module.exports = {
     mostraCadastro,
     buscarUsuarios,
     mostrarSocial,
-    logout
+    logout,
+    mostraEditarUsuario
 };
