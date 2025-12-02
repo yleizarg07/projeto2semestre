@@ -201,7 +201,7 @@ async function criarSocial(req, res) {
       .render("pages/erro", {
         error: "Erro ao criar social do usuário: " + error.message,
       });
-  }
+    }
 }
 
 async function atualizarSocial(req, res) {
