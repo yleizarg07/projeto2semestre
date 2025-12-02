@@ -113,7 +113,7 @@ async function criarUsuario(req, res) {
     const { nome, email, nomeUsuario, senha, senha2 } = req.body; //requere os envios do usuario
 
     //verfica se as os campos foram preenchidos
-    if (!senha || !senha2) {
+    if (!nome || !email || !nomeUsuario || !senha || !senha2) {
       return res
         .status(400)
         .render("pages/cadastro", { error: "Preencha os campos necessarios" });
@@ -275,7 +275,7 @@ async function login(req, res) {
 
     //compara senha enviada com o hash armazenado
     const senhaValida = await bcrypt.compare(
-      string(senha),
+      senha,
       usuarioEncontrado.senha
     ); //compara as senhas
     if (!senhaValida) {
@@ -353,7 +353,16 @@ async function removerUsuario(req, res) {
         .render("pages/erro", { error: "Usuário não encontrado" });
     }
 
-    return res.status(200).redirect("/usuarios");
+    req.session.destroy(err => {
+      if (err) {
+        console.error("Erro ao destruir a sessão:", err);
+        return res.redirect("/"); // mesmo com erro, manda pra home
+      }
+      res.clearCookie("connect.sid");
+
+      return res.redirect("/");
+    });
+
   } catch (error) {
     console.error("Erro ao remover usuário:", error);
     return res
