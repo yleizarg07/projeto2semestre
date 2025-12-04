@@ -316,18 +316,37 @@ async function logout(req, res) {
 async function atualizarUsuario(req, res) {
   try {
     const { id } = req.params; //id do usuário na rota
-    const { nome, nomeUsuario, senha } = req.body; //dados do formulário
+    const { nome, nomeUsuario, senha: senhaNova, senhaAtual } = req.body; //dados do formulário
 
+    //validação da senha antiga para mudar dados
+    const usuario = await UsuarioModel.findOne({
+      where: { idUsuario: parseInt(id) },
+      attributes: ["idUsuario", "nome", "nome_usuario", "senha"],
+    });
+    if (!usuario) {
+      return res.status(404).render("pages/erro", { error: "Usuário não encontrado" });
+    }
+
+    // exige a senha atual para autorizar alterações
+    if (!senhaAtual) {
+      return res.status(401).render("pages/editarUsuario", { usuario, error: "Digite sua senha atual para confirmar as alterações." });
+    }
+
+    const senhaValida = await bcrypt.compare(senhaAtual, usuario.senha);
+    if (!senhaValida) {
+      return res.status(401).render("pages/editarUsuario", { usuario, error: "Senha atual incorreta." });
+    }
+
+    // monta os dados a serem atualizados
     const dadosAtualizados = { nome, nome_usuario: nomeUsuario };
-    if (senha) dadosAtualizados.senha = await bcrypt.hash(senha, 10); //impressão digital da nova senha se fornecida
+    if (senhaNova) dadosAtualizados.senha = await bcrypt.hash(senhaNova, 10); // hash da nova senha se fornecida
 
     const [atualizados] = await UsuarioModel.update(dadosAtualizados, {
       where: { idUsuario: parseInt(id) },
     });
+
     if (!atualizados)
-      return res
-        .status(404)
-        .render("pages/erro", { error: "Usuário não encontrado" });
+      return res.status(404).render("pages/erro", { error: "Usuário não encontrado" });
 
     return res.status(200).redirect("/usuarios");
   } catch (error) {
