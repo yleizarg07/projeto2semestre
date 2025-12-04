@@ -15,6 +15,35 @@
             <label class="form-label">Nome de Usuário</label>
             <input type="text" name="nomeUsuario" class="form-control" value="<%= usuario.nome_usuario %>" required>
         </div>
+            <!-- Campo de Senha Atual -->
+    <div class="mb-3 position-relative">
+        <label for="senhaAtual" class="form-label">Senha Atual</label>
+
+        <input 
+            type="password" 
+            class="form-control" 
+            id="senhaAtual" 
+            name="senhaAtual"
+            placeholder="Digite sua senha atual"
+            required
+            style="padding-right: 40px;"
+        >
+
+        <i 
+            class="bi bi-eye-slash"
+            id="toggleSenhaAtual"
+            style="
+                position: absolute;
+                top: 70%;
+                right: 10px;
+                transform: translateY(-50%);
+                cursor: pointer;
+                font-size: 1.2rem;
+                color: #6c757d;
+            "
+        ></i>
+    </div>
+
 
         <!-- Campo de senha com ícone -->
         <div class="mb-3 position-relative">
@@ -43,6 +72,33 @@
                 "
             ></i>
         </div>
+
+        <div class="mb-3 position-relative">
+                <label for="senha2" class="form-label fw-semibold">Confirme sua Senha</label>
+
+                <input 
+                    type="password" 
+                    class="form-control" 
+                    name="senha2" 
+                    id="senha2" 
+                    style="padding-right: 40px;"
+                >
+
+                <!-- Ícone dentro do input -->
+                <i 
+                    class="bi bi-eye-slash"
+                    id="toggleSenha2"
+                    style="
+                        position: absolute;
+                        top: 70%;
+                        right: 12px;
+                        transform: translateY(-50%);
+                        cursor: pointer;
+                        font-size: 1.2rem;
+                        color: #6c757d;
+                    "
+                ></i>
+            </div>
 
         <button type="submit" class="btn btn-primary">Salvar alterações</button>
 
@@ -87,8 +143,21 @@
 <%- include('../partials/footer') %>
 
 <script>
-document.getElementById("toggleSenha").addEventListener("click", function () {
-    const senhaInput = document.getElementById("senha");
+// Quando digitar a nova senha, ativa o required na confirmação
+document.getElementById("senha").addEventListener("input", function () {
+    const senha = document.getElementById("senha");
+    const senha2 = document.getElementById("senha2");
+
+    if (senha.value.trim() !== "") {
+        senha2.required = true;
+    } else {
+        senha2.required = false;
+    }
+});
+</script>
+<script>
+document.getElementById("toggleSenhaAtual").addEventListener("click", function () {
+    const senhaInput = document.getElementById("senhaAtual");
 
     if (senhaInput.type === "password") {
         senhaInput.type = "text";
