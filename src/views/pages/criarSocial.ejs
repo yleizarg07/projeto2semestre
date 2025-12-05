@@ -1,0 +1,69 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+
+<div class="container mt-4" style="max-width: 700px;">
+    <h2 class="mb-4">Criar Informações Sociais</h2>
+
+    <% if (error) { %>
+        <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+
+    <form action="/usuarios/social/criar" method="POST" class="card p-4">
+
+        <div class="mb-3">
+            <label class="form-label">Relacionamento</label>
+            <select name="relacionamento" class="form-select">
+                <option value="">Selecione...</option>
+                <option value="Solteiro(a)">Solteiro(a)</option>
+                <option value="Namorando">Namorando</option>
+                <option value="Casado(a)">Casado(a)</option>
+                <option value="Complicado">Complicado</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Aniversário</label>
+            <input type="date" name="aniversario" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Idade</label>
+            <input type="number" name="idade" class="form-control" min="1" max="120">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Interesses</label>
+            <input type="text" name="interesses" class="form-control" placeholder="Ex: música, filmes...">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Hobbies</label>
+            <input type="text" name="hobbies" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Estilo</label>
+            <input type="text" name="estilo" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Animais de Estimação</label>
+            <input type="text" name="animaisEstimacao" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Paixões</label>
+            <input type="text" name="paixoes" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Humor</label>
+            <input type="text" name="humor" class="form-control">
+        </div>
+
+        <button class="btn btn-primary">Salvar Informações</button>
+        <a href="/usuarios/social" class="btn btn-secondary ms-2">Cancelar</a>
+    </form>
+</div>
+
+<%- include('../partials/footer') %>

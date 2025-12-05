@@ -76,6 +76,9 @@ async function listarSocial(req, res) {
       where: { idUsuario },
       //attributes = lista dos campos que queremos retornar do banco
       attributes: [
+        "idUsuario",
+        "nome",
+        "nome_usuario",
         "relacionamento",
         "aniversario",
         "idade",
@@ -93,9 +96,22 @@ async function listarSocial(req, res) {
         .status(404)
         .render("pages/erro", { error: "Usuário não encontrado" });
     }
+    const naoTemSocial =
+      !usuario.relacionamento &&
+      !usuario.aniversario &&
+      !usuario.idade &&
+      !usuario.interesses &&
+      !usuario.hobbies &&
+      !usuario.estilo &&
+      !usuario.animaisEstimacao &&
+      !usuario.paixoes &&
+      !usuario.humor;
 
+    return res.render("pages/socialUsuario", {
+      usuario,
+      naoTemSocial,
+    });
     //renderiza a página que mostra os dados sociais do usuário
-    return res.status(200).render("pages/socialUsuario", { usuario });
   } catch (error) {
     //erro no servidor e render de página de erro
     console.error("Erro ao listar dados sociais:", error);
@@ -315,49 +331,88 @@ async function logout(req, res) {
 
 async function atualizarUsuario(req, res) {
   try {
-    const { id } = req.params; //id do usuário na rota
-    const { nome, nomeUsuario, senha: senhaNova, senhaAtual } = req.body; //dados do formulário
+    const { id } = req.params;
+    // nomes esperados do form: senhaAtual (atual), senha (nova), senha2 (confirma)
+    const { nome, nomeUsuario, senha: senhaNova, senha2, senhaAtual } = req.body;
 
-    //validação da senha antiga para mudar dados
+    // buscar usuário e garantir que traz o hash da senha
     const usuario = await UsuarioModel.findOne({
-      where: { idUsuario: parseInt(id) },
+      where: { idUsuario: parseInt(id, 10) },
       attributes: ["idUsuario", "nome", "nome_usuario", "senha"],
     });
+
     if (!usuario) {
-      return res.status(404).render("pages/erro", { error: "Usuário não encontrado" });
+      return res.status(404).render("pages/editarUsuario", {
+        usuario: null,
+        error: "Usuário não encontrado",
+      });
     }
 
-    // exige a senha atual para autorizar alterações
-    if (!senhaAtual) {
-      return res.status(401).render("pages/editarUsuario", { usuario, error: "Digite sua senha atual para confirmar as alterações." });
+    // monta objeto com campos que sempre atualizamos
+    const dadosAtualizados = {
+      nome,
+      nome_usuario: nomeUsuario,
+    };
+
+    // Se o usuário NÃO quer mudar a senha -> atualiza só nome/nome_usuario
+
+     if (senhaAtual && !senhaNova) {
+      return res.render("pages/editarUsuario", {
+        usuario,
+        error: "Digite a nova senha para alterar.",
+      });
+    }
+    if (!senhaNova || senhaNova.trim() === "") {
+      await UsuarioModel.update(dadosAtualizados, {
+        where: { idUsuario: parseInt(id, 10) },
+      });
+      return res.redirect("/usuarios");
+    }
+    // A partir daqui: o usuário quer trocar a senha -> precisamos validar tudo
+
+    // 1) senhaAtual precisa existir no request
+    if (!senhaAtual || senhaAtual.trim() === "") {
+      return res.render("pages/editarUsuario", {
+        usuario,
+        error: "Digite sua senha atual para alterar a senha.",
+      });
     }
 
-    const senhaValida = await bcrypt.compare(senhaAtual, usuario.senha);
-    if (!senhaValida) {
-      return res.status(401).render("pages/editarUsuario", { usuario, error: "Senha atual incorreta." });
+    // 2) verificar senhaAtual comparando com o hash do DB (await obrigatório)
+    const senhaAtualValida = await bcrypt.compare(senhaAtual, usuario.senha);
+    if (!senhaAtualValida) {
+      return res.render("pages/editarUsuario", {
+        usuario,
+        error: "Senha atual incorreta.",
+      });
     }
 
-    // monta os dados a serem atualizados
-    const dadosAtualizados = { nome, nome_usuario: nomeUsuario };
-    if (senhaNova) dadosAtualizados.senha = await bcrypt.hash(senhaNova, 10); // hash da nova senha se fornecida
+    // 3) confirmar nova senha
+    if (!senha2 || senhaNova !== senha2) {
+      return res.render("pages/editarUsuario", {
+        usuario,
+        error: "A confirmação da nova senha não corresponde.",
+      });
+    }
 
-    const [atualizados] = await UsuarioModel.update(dadosAtualizados, {
-      where: { idUsuario: parseInt(id) },
+    // 4) só agora gerar o hash da nova senha E atribuir a dadosAtualizados
+    const hashNova = await bcrypt.hash(senhaNova, 10);
+    dadosAtualizados.senha = hashNova;
+
+    // 5) atualizar tudo de uma vez
+    await UsuarioModel.update(dadosAtualizados, {
+      where: { idUsuario: parseInt(id, 10) },
     });
 
-    if (!atualizados)
-      return res.status(404).render("pages/erro", { error: "Usuário não encontrado" });
-
-    return res.status(200).redirect("/usuarios");
-  } catch (error) {
-    console.error("Erro ao atualizar usuário:", error);
-    return res
-      .status(500)
-      .render("pages/erro", {
-        error: "Erro ao atualizar usuário: " + error.message,
-      });
+    return res.redirect("/usuarios");
+  } catch (err) {
+    console.error("Erro ao atualizar usuário:", err);
+    return res.status(500).render("pages/erro", {
+      error: "Erro ao atualizar usuário: " + err.message,
+    });
   }
 }
+
 
 async function removerUsuario(req, res) {
   try {
@@ -473,6 +528,37 @@ async function mostraEditarUsuario(req, res) {
   }
 }
 
+async function verPerfilSocial(req, res) {
+  try {
+    const { id } = req.params;
+
+    const usuario = await UsuarioModel.findOne({
+      where: { idUsuario: parseInt(id) },
+      attributes: ["idUsuario", "nome", "nome_usuario", "relacionamento", "aniversario", "idade", "interesses", "hobbies", "estilo", "animaisEstimacao", "paixoes", "humor"],
+    });
+
+    if (!usuario) {
+      return res.status(404).render("pages/erro", { error: "Usuário não encontrado" });
+    }
+
+    return res.render("pages/perfilSocialOutro", { usuario });
+  } catch (error) {
+    console.error("Erro ao carregar perfil:", error);
+    return res.status(500).render("pages/erro", {
+      error: "Erro ao carregar perfil social",
+    });
+  }
+}
+
+function formCriarSocial(req, res) {
+  const idUsuario = req.session.idUsuario;
+  if (!idUsuario) return res.redirect("/usuarios/login");
+
+  return res.render("pages/criarSocial", { error: null });
+}
+
+
+
 module.exports = {
   listarUsuarios,
   criarUsuario,
@@ -489,4 +575,6 @@ module.exports = {
   mostrarSocial,
   logout,
   mostraEditarUsuario,
+  verPerfilSocial,
+  formCriarSocial,
 };

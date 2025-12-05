@@ -43,5 +43,11 @@ router.get('/logout', usuarioController.logout);
 
 router.get('/editar', usuarioController.mostraEditarUsuario);
 
+router.get('/perfil/:id', usuarioController.verPerfilSocial);
+
+router.get("/listar/social", usuarioController.listarSocial);
+
+router.get("/social/criar", usuarioController.formCriarSocial);
+
 
 module.exports = router;
