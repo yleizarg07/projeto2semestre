@@ -178,6 +178,22 @@ async function criarSocial(req, res) {
       paixoes,
       humor,
     } = req.body; //requere as informações enviadas pelo usuario
+    //verifica se todos os campos foram preenchidos
+    if (
+      !relacionamento ||
+      !aniversario ||
+      !idade ||
+      !interesses ||
+      !hobbies ||
+      !estilo ||
+      !animaisEstimacao ||
+      !paixoes ||
+      !humor
+    ) {
+      return res.status(400).render("pages/erro", {
+        error: "Por favor, preencha todos os campos antes de continuar."
+      });
+    }
 
     //pega id do usuário da sessão
     const idUsuario = req.session.idUsuario;
@@ -234,6 +250,22 @@ async function atualizarSocial(req, res) {
       paixoes,
       humor,
     } = req.body; //dados do formulário
+
+    if (
+      !relacionamento &&
+      !aniversario &&
+      !idade &&
+      !interesses &&
+      !hobbies &&
+      !estilo &&
+      !animaisEstimacao &&
+      !paixoes &&
+      !humor
+    ) {
+      return res.status(400).render("pages/erro", {
+        error: "Por favor, preencha ao menos um campo para atualizar."
+      });
+    }
 
     const dadosSociais = {
       relacionamento,
@@ -505,10 +537,6 @@ async function buscarUsuarios(req, res) {
   }
 }
 
-function mostrarSocial(req, res) {
-  return res.status(200).render("pages/socialUsuario", { error: null });
-}
-
 async function mostraEditarUsuario(req, res) {
   try {
     const idUsuario = req.session.idUsuario;
@@ -557,6 +585,81 @@ function formCriarSocial(req, res) {
   return res.render("pages/criarSocial", { error: null });
 }
 
+async function mostraEditarSocial(req, res) {
+  try {
+    const { id } = req.params;
+
+    // Busca o usuário pelo ID e pega só os campos sociais
+    const usuario = await UsuarioModel.findOne({
+      where: { idUsuario: parseInt(id, 10) },
+      attributes: [
+      "idUsuario",
+      "relacionamento",
+      "aniversario",
+      "idade",
+      "interesses",
+      "hobbies",
+      "estilo",
+      "animaisEstimacao",
+      "paixoes",
+      "humor"
+      ]
+    });
+
+  if (!usuario) {
+    return res
+      .status(404)
+      .render("pages/erro", { error: "Dados sociais não encontrados." });
+  }
+
+    return res.render("pages/editarSocial", { usuario });
+} catch (error) {
+  console.error("Erro ao carregar edição social:", error);
+  return res
+    .status(500)
+    .render("pages/erro", {
+      error: "Erro ao carregar página de edição social."
+    });
+}
+}
+
+async function removerSocial(req, res) {
+  try {
+    const { id } = req.params;
+
+    // Zera todos os campos sociais
+    const dadosVazios = {
+      relacionamento: null,
+      aniversario: null,
+      idade: null,
+      interesses: null,
+      hobbies: null,
+      estilo: null,
+      animaisEstimacao: null,
+      paixoes: null,
+      humor: null
+    };
+
+    // Atualiza no banco
+    const [atualizados] = await UsuarioModel.update(dadosVazios, {
+      where: { idUsuario: parseInt(id, 10) },
+    });
+
+    if (!atualizados) {
+      return res.status(404)
+        .render("pages/erro", { error: "Usuário não encontrado" });
+    }
+
+    return res.redirect(`/usuarios/listar/social`);
+  } catch (error) {
+    console.error("Erro ao remover informações sociais:", error);
+    return res.status(500).render("pages/erro", {
+      error: "Erro ao remover informações sociais: " + error.message,
+    });
+  }
+}
+
+
 
 
 module.exports = {
@@ -572,9 +675,10 @@ module.exports = {
   mostraLogin,
   mostraCadastro,
   buscarUsuarios,
-  mostrarSocial,
   logout,
   mostraEditarUsuario,
   verPerfilSocial,
   formCriarSocial,
+  mostraEditarSocial,
+  removerSocial 
 };

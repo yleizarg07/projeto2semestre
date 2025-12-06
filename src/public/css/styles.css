@@ -11,34 +11,202 @@
   z-index: 999;
 }
 
-.login-card {
-            width: 350px;
-            padding: 25px;
-            border-radius: 15px;
-            background: #fff;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-        }
+/* Container centralizado */
+.erro-container {
+    min-height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-        .logo {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            object-fit: cover;
-            display: block;
-            margin: 0 auto 10px;
-        }
+/* Card de erro */
+.erro-card {
+    max-width: 500px;
+    width: 100%;
+    border-radius: 20px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
 
-        h2 {
-            text-align: center;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
+/* Ícone */
+.erro-icone i {
+    font-size: 3rem;
+    color: #ffc107; /* text-warning */
+}
 
-        .link {
-            text-decoration: none;
-            color: #0d6efd;
-        }
+/* Título */
+.erro-titulo {
+    margin-bottom: 1rem;
+    color: #dc3545; /* text-danger */
+    font-weight: bold;
+}
 
-        .link:hover {
-            text-decoration: underline;
-        }
+/* Mensagem de erro */
+.erro-mensagem {
+    font-size: 1.1rem;
+    color: #6c757d; /* text-muted */
+    margin-bottom: 1.5rem;
+}
+
+/* Estilos da página de buscaUsuario*/
+
+.busca-usuario-container h3 {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.busca-usuario-erro {
+    color: #dc3545;
+    font-weight: 500;
+}
+
+.busca-usuario-lista {
+    padding-left: 0;
+}
+
+.busca-usuario-item {
+    border-radius: 10px;
+    transition: background 0.2s ease-in-out;
+}
+
+.busca-usuario-item:hover {
+    background: #f1f1f1;
+}
+
+.busca-usuario-nome {
+    font-weight: bold;
+    text-decoration: underline;
+    color: inherit;
+}
+
+.busca-usuario-nome:hover {
+    color: #0d6efd;
+}
+
+.busca-usuario-vazio {
+    font-style: italic;
+    color: #6c757d;
+}
+
+/*Estilos da página de Cadastro*/
+
+.cadastro-container {
+    min-height: 75vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.cadastro-card {
+    max-width: 400px;
+    width: 100%;
+    border-radius: 15px;
+}
+
+.cadastro-titulo {
+    color: #b98c78;
+}
+
+/* Inputs com espaço para ícone */
+.cadastro-input {
+    padding-right: 40px !important;
+}
+
+/* Ícone olho de senha */
+.icon-senha {
+    position: absolute;
+    top: 70%;
+    right: 12px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+.icon-senha:hover {
+    color: #000;
+}
+
+/*Estilos da página Criar Postagem e Editar Postagem*/
+
+.post-container {
+    max-width: 800px;
+    margin-top: 50px;
+    margin-bottom: 40px;
+}
+
+.post-titulo {
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.post-form .form-label {
+    font-weight: 500;
+}
+
+.post-textarea {
+    resize: vertical;
+}
+
+.post-botao {
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.post-cancelar {
+    margin-left: 10px;
+}
+
+/* ================================
+   Estilos da página Editar Social
+   ================================ */
+
+.editar-social-container {
+    max-width: 750px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.editar-social-card {
+    border-radius: 10px;
+}
+
+.editar-social-header {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.editar-social-body {
+    padding: 20px;
+}
+
+.editar-social-botoes a,
+.editar-social-botoes button {
+    min-width: 120px;
+}
+
+/* Container */
+.editar-usuario-container {
+    max-width: 700px;
+}
+
+/* Campo com ícone ao lado */
+.input-icon-container input {
+    padding-right: 40px !important;
+}
+
+/* Ícone de mostrar/esconder senha */
+.toggle-icon {
+    position: absolute;
+    top: 70%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+

@@ -1,32 +1,36 @@
 <%- include('../partials/head') %>
 <%- include('../partials/header') %>
 
-<div class="container mt-5" style="max-width:800px;">
-    <h2>Editar Postagem</h2>
-    <form action="/posts/editar/<%= postagem.idPost %>" method="POST">
+<div class="container post-container">
+    <h2 class="post-titulo">Editar Postagem</h2>
+
+    <form action="/posts/editar/<%= postagem.idPost %>" method="POST" class="post-form">
+
         <div class="mb-3">
             <label for="titulo" class="form-label">Título</label>
             <input 
                 type="text" 
-                class="form-control" 
-                id="titulo" 
-                name="titulo" 
-                value="<%= postagem.titulo %>" 
+                class="form-control"
+                id="titulo"
+                name="titulo"
+                value="<%= postagem.titulo %>"
                 required
             >
         </div>
+
         <div class="mb-3">
             <label for="conteudo" class="form-label">Conteúdo</label>
             <textarea 
-                class="form-control" 
-                id="conteudo" 
-                name="conteudo" 
-                rows="5" 
+                class="form-control post-textarea"
+                id="conteudo"
+                name="conteudo"
+                rows="5"
                 required
             ><%= postagem.conteudo %></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-        <a href="/posts/<%= postagem.idPost %>" class="btn btn-secondary">Cancelar</a>
+
+        <button type="submit" class="btn btn-primary post-botao">Salvar Alterações</button>
+        <a href="/posts/<%= postagem.idPost %>" class="btn btn-secondary post-cancelar">Cancelar</a>
     </form>
 </div>
 

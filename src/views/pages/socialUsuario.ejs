@@ -23,12 +23,12 @@
             <li class="list-group-item"><strong>Paixões:</strong> <%= usuario.paixoes %></li>
             <li class="list-group-item"><strong>Humor:</strong> <%= usuario.humor %></li>
         </ul>
-
+        <div class="d-flex">
         <a href="/usuarios/social/editar/<%= usuario.idUsuario %>" class="btn btn-warning">Editar Informações</a>
+        <a href="/usuarios/social/remover/<%= usuario.idUsuario %>" class="btn btn-danger ms-2">Remover Informações</a>
+        <a href="/usuarios" class="btn btn-secondary ms-2">Voltar</a>
+        </div>
     <% } %>
-
-    <a href="/usuarios" class="btn btn-secondary mt-3">Voltar</a>
-
 </div>
 
 <%- include('../partials/footer') %>

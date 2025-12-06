@@ -1,118 +1,98 @@
 <%- include('../partials/head') %>
 <%- include('../partials/header') %>
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 75vh; margin-top: 40px; margin-bottom: 40px;">
-    <div class="card shadow p-4" style="max-width: 400px; width: 100%; border-radius: 15px;">
 
-        <% if (error) { %>
-        <div class="alert alert-danger"><%= error %></div>
-        <% } %>
-        <div class="text-center mb-3">
-            <img src="/images/logo.jpg" alt="logo" width="80" class="rounded-circle mb-2">
-            <h3 class="fw-bold" style="color:#b98c78;">Cadastro</h3>
+<div class="container cadastro-container">
+    <div class="card cadastro-card shadow p-4">
+
+    <% if (error) { %>
+    <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+
+    <div class="text-center mb-3">
+        <img src="/images/logo.jpg" alt="logo" width="80" class="rounded-circle mb-2">
+        <h3 class="fw-bold cadastro-titulo">Cadastro</h3>
+    </div>
+
+    <form action="/usuarios/criar" method="POST">
+
+        <div class="mb-3">
+            <label for="nome" class="form-label fw-semibold">Nome Completo</label>
+            <input type="text" class="form-control" name="nome" id="nome" required>
         </div>
-        <form action="/usuarios/criar" method="POST">
-            <div class="mb-3">
-                <label for="nome" class="form-label fw-semibold">Nome Completo</label>
-                <input type="text" class="form-control" name="nome" id="nome" required>
-            </div>
 
-            <div class="mb-3">
-                <label for="nome_usuario" class="form-label fw-semibold">Nome de Usuário</label>
-                <input type="text" class="form-control" name="nomeUsuario" id="nome_usuario" required>
-            </div>
+        <div class="mb-3">
+            <label for="nome_usuario" class="form-label fw-semibold">Nome de Usuário</label>
+            <input type="text" class="form-control" name="nomeUsuario" id="nome_usuario" required>
+        </div>
 
-            <div class="mb-3">
-                <label for="email" class="form-label fw-semibold">Email</label>
-                <input type="email" class="form-control" name="email" id="email" required>
-            </div>
+        <div class="mb-3">
+            <label for="email" class="form-label fw-semibold">Email</label>
+            <input type="email" class="form-control" name="email" id="email" required>
+        </div>
 
-            <div class="mb-3 position-relative">
-                <label for="senha" class="form-label fw-semibold">Senha</label>
+        <!-- Senha -->
+        <div class="mb-3 position-relative">
+            <label for="senha" class="form-label fw-semibold">Senha</label>
 
-                <input 
-                    type="password" 
-                    class="form-control" 
-                    name="senha" 
-                    id="senha" 
-                    required
-                    style="padding-right: 40px;"
-                >
+            <input 
+                type="password" 
+                class="form-control cadastro-input"
+                name="senha" 
+                id="senha" 
+                required
+            >
 
-                <!-- Ícone dentro do input -->
-                <i 
-                    class="bi bi-eye-slash"
-                    id="toggleSenha"
-                    style="
-                        position: absolute;
-                        top: 70%;
-                        right: 12px;
-                        transform: translateY(-50%);
-                        cursor: pointer;
-                        font-size: 1.2rem;
-                        color: #6c757d;
-                    "
-                ></i>
-            </div>
+            <i class="bi bi-eye-slash icon-senha" id="toggleSenha"></i>
+        </div>
 
-            <div class="mb-3 position-relative">
-                <label for="senha2" class="form-label fw-semibold">Confirme sua Senha</label>
+        <!-- Confirmar Senha -->
+        <div class="mb-3 position-relative">
+            <label for="senha2" class="form-label fw-semibold">Confirme sua Senha</label>
 
-                <input 
-                    type="password" 
-                    class="form-control" 
-                    name="senha2" 
-                    id="senha2" 
-                    required
-                    style="padding-right: 40px;"
-                >
+            <input 
+                type="password" 
+                class="form-control cadastro-input"
+                name="senha2" 
+                id="senha2" 
+                required
+            >
 
-                <!-- Ícone dentro do input -->
-                <i 
-                    class="bi bi-eye-slash"
-                    id="toggleSenha2"
-                    style="
-                        position: absolute;
-                        top: 70%;
-                        right: 12px;
-                        transform: translateY(-50%);
-                        cursor: pointer;
-                        font-size: 1.2rem;
-                        color: #6c757d;
-                    "
-                ></i>
-            </div>
+            <i class="bi bi-eye-slash icon-senha" id="toggleSenha2"></i>
+        </div>
 
-            <script>
-                function toggleSenha(idInput, idIcon) {
-                    const input = document.getElementById(idInput);
-                    const icon = document.getElementById(idIcon);
+        <script>
+            function toggleSenha(idInput, idIcon) {
+                const input = document.getElementById(idInput);
+                const icon = document.getElementById(idIcon);
 
-                    if (input.type === "password") {
-                        input.type = "text";
-                        icon.classList.remove("bi-eye-slash");
-                        icon.classList.add("bi-eye");
-                    } else {
-                        input.type = "password";
-                        icon.classList.remove("bi-eye");
-                        icon.classList.add("bi-eye-slash");
-                    }
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.classList.remove("bi-eye-slash");
+                    icon.classList.add("bi-eye");
+                } else {
+                    input.type = "password";
+                    icon.classList.remove("bi-eye");
+                    icon.classList.add("bi-eye-slash");
                 }
+            }
 
-                document.getElementById("toggleSenha").addEventListener("click", function(){
-                    toggleSenha("senha", "toggleSenha");
-                });
+            document.getElementById("toggleSenha").addEventListener("click", () => {
+                toggleSenha("senha", "toggleSenha");
+            });
 
-                document.getElementById("toggleSenha2").addEventListener("click", function(){
-                    toggleSenha("senha2", "toggleSenha2");
-                });
-            </script>
+            document.getElementById("toggleSenha2").addEventListener("click", () => {
+                toggleSenha("senha2", "toggleSenha2");
+            });
+        </script>
 
-            <button class="btn btn-primary w-100 mt-2">Cadastrar</button>
-        </form>
+    <button class="btn btn-primary w-100 mt-2">Cadastrar</button>
+    </form>
+
         <p class="text-center mt-3">
             Já tem uma conta?
             <a href="/usuarios/login" class="text-primary fw-semibold">Entrar</a>
         </p>
     </div>
 </div>
+
 <%- include('../partials/footer') %>

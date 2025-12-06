@@ -11,9 +11,6 @@ router.get('/login', usuarioController.mostraLogin);
 // Página de cadastro
 router.get('/cadastro', usuarioController.mostraCadastro);
 
-// Página de dados sociais
-router.get('/social', usuarioController.mostrarSocial);
-
 // Listar usuários (todos ou por ID via query ?id=)
 router.get('/listar', usuarioController.listarUsuarios);
 
@@ -41,13 +38,23 @@ router.get('/buscar', usuarioController.buscarUsuarios);
 //logout
 router.get('/logout', usuarioController.logout);
 
+// Página de edição do usuário
 router.get('/editar', usuarioController.mostraEditarUsuario);
 
+// Página de perfil social do usuário
 router.get('/perfil/:id', usuarioController.verPerfilSocial);
 
+// Listar dados sociais
 router.get("/listar/social", usuarioController.listarSocial);
 
+// Formulário para criar dados sociais
 router.get("/social/criar", usuarioController.formCriarSocial);
+
+// Página de edição dos dados sociais
+router.get('/social/editar/:id', usuarioController.mostraEditarSocial);
+
+// Remover dados sociais
+router.get('/social/remover/:id', usuarioController.removerSocial);
 
 
 module.exports = router;

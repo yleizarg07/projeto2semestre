@@ -1,111 +1,76 @@
 <%- include('../partials/head') %>
 <%- include('../partials/header') %>
 
-<div class="container mt-5" style="max-width: 700px;">
+<div class="container mt-5 editar-usuario-container">
 
-<h2>Editar Informações do Usuário</h2>
+    <h2>Editar Informações do Usuário</h2>
 
-<% if (typeof error !== "undefined" && error) { %>
-<div class="alert alert-danger mt-3 mb-3">
-    <i class="bi bi-exclamation-triangle-fill"></i> <%= error %>
-</div>
-<% } %>
+    <% if (typeof error !== "undefined" && error) { %>
+        <div class="alert alert-danger mt-3 mb-3">
+            <i class="bi bi-exclamation-triangle-fill"></i> <%= error %>
+        </div>
+    <% } %>
 
-<form action="/usuarios/atualizar/<%= usuario.idUsuario %>" method="POST">
-    <div class="mb-3">
-        <label class="form-label">Nome</label>
-        <input type="text" name="nome" class="form-control" value="<%= usuario.nome %>" required>
-    </div>
+    <form action="/usuarios/atualizar/<%= usuario.idUsuario %>" method="POST">
 
-    <div class="mb-3">
-        <label class="form-label">Nome de Usuário</label>
-        <input type="text" name="nomeUsuario" class="form-control" value="<%= usuario.nome_usuario %>" required>
-    </div>
-            <!-- Campo de Senha Atual -->
-    <div class="mb-3 position-relative">
-        <label for="senhaAtual" class="form-label">Senha Atual</label>
+        <div class="mb-3">
+            <label class="form-label">Nome</label>
+            <input type="text" name="nome" class="form-control" 
+                   value="<%= usuario.nome %>" required>
+        </div>
 
-        <input 
-        type="password" 
-        class="form-control" 
-        id="senhaAtual" 
-        name="senhaAtual"
-        placeholder="Digite sua senha atual"
-        style="padding-right: 40px;"
-        >
+        <div class="mb-3">
+            <label class="form-label">Nome de Usuário</label>
+            <input type="text" name="nomeUsuario" class="form-control" 
+                   value="<%= usuario.nome_usuario %>" required>
+        </div>
 
-        <i 
-        class="bi bi-eye-slash"
-        id="toggleSenhaAtual"
-        style="
-            position: absolute;
-            top: 70%;
-            right: 10px;
-            transform: translateY(-50%);
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: #6c757d;
-        "
-        ></i>
-    </div>
-    <!-- Campo de senha com ícone -->
-    <div class="mb-3 position-relative">
-        <label for="senha" class="form-label">Nova Senha</label>
+        <!-- Senha atual -->
+        <div class="mb-3 position-relative input-icon-container">
+            <label for="senhaAtual" class="form-label">Senha Atual</label>
 
-        <input 
-            type="password" 
-            class="form-control" 
-            id="senha" 
-            name="senha"
-            placeholder="Digite a nova senha"
-            style="padding-right: 40px;"
-        >
+            <input 
+                type="password" 
+                class="form-control" 
+                id="senhaAtual" 
+                name="senhaAtual"
+                placeholder="Digite sua senha atual"
+            >
 
-        <i 
-            class="bi bi-eye-slash"
-            id="toggleSenha"
-            style="
-                position: absolute;
-                top: 70%;
-                right: 10px;
-                transform: translateY(-50%);
-                cursor: pointer;
-                font-size: 1.2rem;
-                color: #6c757d;
-            "
-        ></i>
-    </div>
+            <i class="bi bi-eye-slash toggle-icon" id="toggleSenhaAtual"></i>
+        </div>
 
-    <div class="mb-3 position-relative">
+        <!-- Nova senha -->
+        <div class="mb-3 position-relative input-icon-container">
+            <label for="senha" class="form-label">Nova Senha</label>
+
+            <input 
+                type="password" 
+                class="form-control" 
+                id="senha" 
+                name="senha"
+                placeholder="Digite a nova senha"
+            >
+
+            <i class="bi bi-eye-slash toggle-icon" id="toggleSenha"></i>
+        </div>
+
+        <!-- Confirmar senha -->
+        <div class="mb-3 position-relative input-icon-container">
             <label for="senha2" class="form-label fw-semibold">Confirme sua Senha</label>
 
             <input 
                 type="password" 
                 class="form-control" 
-                name="senha2" 
                 id="senha2" 
-                style="padding-right: 40px;"
+                name="senha2"
             >
 
-            <!-- Ícone dentro do input -->
-            <i 
-            class="bi bi-eye-slash"
-            id="toggleSenha2"
-            style="
-                position: absolute;
-                top: 70%;
-                right: 12px;
-                transform: translateY(-50%);
-                cursor: pointer;
-                font-size: 1.2rem;
-                color: #6c757d;
-            "
-            ></i>
+            <i class="bi bi-eye-slash toggle-icon" id="toggleSenha2"></i>
         </div>
 
-    <button type="submit" class="btn btn-primary">Salvar alterações</button>
+        <button type="submit" class="btn btn-primary">Salvar alterações</button>
 
-        <!-- Botão que abre o modal -->
         <button 
             type="button" 
             class="btn btn-danger ms-2" 
@@ -116,74 +81,64 @@
     </form>
 </div>
 
-<!-- MODAL DE CONFIRMAÇÃO -->
+<!-- Modal -->
 <div class="modal fade" id="modalExcluir" tabindex="-1" aria-labelledby="modalExcluirLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-        
-        <div class="modal-header">
-            <h5 class="modal-title" id="modalExcluirLabel">Confirmar Exclusão</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalExcluirLabel">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                Tem certeza que deseja <strong>excluir este usuário</strong>?  
+                Esta ação é permanente.
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+                <form action="/usuarios/remover/<%= usuario.idUsuario %>" method="POST">
+                    <button type="submit" class="btn btn-danger">Excluir Usuário</button>
+                </form>
+            </div>
+
         </div>
-
-        <div class="modal-body">
-            Tem certeza que deseja <strong>excluir este usuário</strong>?  
-            Esta ação é permanente e não pode ser desfeita.
-        </div>
-
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-
-            <form action="/usuarios/remover/<%= usuario.idUsuario %>" method="POST">
-                <button type="submit" class="btn btn-danger">Excluir Usuário</button>
-            </form>
-        </div>
-
     </div>
-</div>
 </div>
 
 <%- include('../partials/footer') %>
 
 <script>
-// Quando digitar a nova senha, ativa o required na confirmação
+// Ativa required quando digitar a nova senha
 document.getElementById("senha").addEventListener("input", function () {
-    const senha = document.getElementById("senha");
     const senha2 = document.getElementById("senha2");
-
-    if (senha.value.trim() !== "") {
-        senha2.required = true;
-    } else {
-        senha2.required = false;
-    }
+    senha2.required = this.value.trim() !== "";
 });
 </script>
 
 <script>
-    function toggleSenha(idInput, idIcon) {
-        const input = document.getElementById(idInput);
-        const icon = document.getElementById(idIcon);
+function toggleSenha(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
 
-        if (input.type === "password") {
-            input.type = "text";
-            icon.classList.remove("bi-eye-slash");
-            icon.classList.add("bi-eye");
-        } else {
-            input.type = "password";
-            icon.classList.remove("bi-eye");
-            icon.classList.add("bi-eye-slash");
-        }
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.replace("bi-eye-slash", "bi-eye");
+    } else {
+        input.type = "password";
+        icon.classList.replace("bi-eye", "bi-eye-slash");
     }
+}
 
-    document.getElementById("toggleSenha").addEventListener("click", function(){
-        toggleSenha("senha", "toggleSenha");
-    });
+document.getElementById("toggleSenha").onclick = () =>
+    toggleSenha("senha", "toggleSenha");
 
-    document.getElementById("toggleSenha2").addEventListener("click", function(){
-        toggleSenha("senha2", "toggleSenha2");
-    });
+document.getElementById("toggleSenha2").onclick = () =>
+    toggleSenha("senha2", "toggleSenha2");
 
-    document.getElementById("toggleSenhaAtual").addEventListener("click", function(){
-        toggleSenha("senhaAtual","toggleSenhaAtual");
-    });
+document.getElementById("toggleSenhaAtual").onclick = () =>
+    toggleSenha("senhaAtual", "toggleSenhaAtual");
 </script>
+<%- include('../partials/footer') %>
