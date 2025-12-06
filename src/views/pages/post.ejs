@@ -69,16 +69,39 @@
 
             >
 
-            <!-- CONTEÚDO DO COMENTÁRIO -->
-            <div>
-                <strong>@<%= c.nomeUsuario %></strong>
-                <p class="mb-1"><%= c.conteudo %></p>
-            </div>
-
+<!-- COLUNA DO COMENTÁRIO -->
+        <div class="flex-grow-1">
+            <strong>@<%= c.nomeUsuario %></strong>
+            <p class="mb-1"><%= c.conteudo %></p>
         </div>
 
-    <% }) %>
+        <!-- BOTÃO EXCLUIR (somente para o dono do comentário) -->
+        <% if (session && session.idUsuario === c.idUsuario) { %>
+        <div class="ms-3 d-flex gap-2">
 
+                <!-- EDITAR -->
+                <a 
+                    href="/comentarios/editar/<%= c.idComentario %>" 
+                    class="btn btn-sm btn-warning"
+                >
+                    Editar
+                </a>
+
+                <!-- EXCLUIR -->
+                <form 
+                    action="/comentarios/excluir/<%= c.idComentario %>" method="POST">
+                    <button class="btn btn-sm btn-danger">
+                        Excluir
+                    </button>
+                </form>
+
+            </div>
+
+        <% } %>
+
+    </div>
+
+<% }) %>
     <% } else { %>
         <p class="text-muted">Nenhum comentário ainda. Seja o primeiro!</p>
     <% } %>

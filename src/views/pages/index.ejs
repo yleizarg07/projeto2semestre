@@ -24,13 +24,13 @@
       <h5><%= p.titulo %></h5>
       <p><%= p.conteudo %></p>
 
-      <div>
-        <a href="/posts/<%= p.idPost %>" class="me-3">Ver</a>
+      <div class="d-flex gap-2 mt-3">
+        <a href="/posts/<%= p.idPost %>" class="btn btn-outline-secondary btn-sm">Ver</a>
         <% if (session && session.idUsuario === p.postUsuario) { %>
-          <a href="/posts/editar/<%= p.idPost %>" class="me-2">Editar</a>
+          <a href="/posts/editar/<%= p.idPost %>" class="btn btn-primary btn-sm">Editar</a>
 
           <form action="/posts/excluir/<%= p.idPost %>" method="POST" style="display:inline;">
-            <button class="btn btn-sm btn-link text-danger">Excluir</button>
+            <button class="btn btn-danger btn-sm">Excluir</button>
           </form>
         <% } %>
       </div>

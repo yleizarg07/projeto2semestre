@@ -1,23 +1,51 @@
 <%- include('../partials/head') %>
 <%- include('../partials/header') %>
 
-<div class="container">
-    <h1>Editar Comentário</h1>
+<div class="container" style="max-width: 700px;">
+    
+    <div class="card shadow-sm mt-5">
 
-    <% if (error) { %>
-        <p class="erro"><%= error %></p>
-    <% } %>
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Editar Comentário</h4>
+        </div>
 
-    <form action="/comentarios/editar/<%= comentario.idComentario %>" method="POST" class="formulario">
-        
-        <label>Conteúdo:</label>
-        <textarea name="conteudo" rows="4" required><%= comentario.conteudo %></textarea>
+        <div class="card-body">
 
-        <label>Confirme sua senha:</label>
-        <input type="password" name="senha" required>
+            <% if (error) { %>
+                <div class="alert alert-danger">
+                    <%= error %>
+                </div>
+            <% } %>
 
-        <button type="submit" class="btn-confirmar">Salvar alterações</button>
-    </form>
+            <form action="/comentarios/editar/<%= comentario.idComentario %>" method="POST">
+
+                <!-- CAMPO DE TEXTO -->
+                <div class="mb-3">
+                    <label class="form-label">Conteúdo</label>
+                    <textarea 
+                        name="conteudo" 
+                        class="form-control"
+                        rows="4" 
+                        required
+                    ><%= comentario.conteudo %></textarea>
+                </div>
+
+                <!-- BOTÕES -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="/posts/<%= comentario.comentPost %>" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        Salvar Alterações
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
 </div>
 
 <%- include('../partials/footer') %>

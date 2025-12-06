@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const UsuarioModel = require('../models/usuarioModel');
 const PostModel = require('../models/postModel');
 const ComentarioModel = require('../models/comentarioModel');
+const session = require('express-session');
 
 /*
  novamente os termos para eu não esqucer e ficar facil de visualizar ;)
@@ -204,7 +205,8 @@ async function exibirPost(req, res) {
         return res.render('pages/post', {
             postagem,
             usuario,
-            comentarios: comentariosView
+            comentarios: comentariosView,
+            session: req.session
         });
 
     } catch (error) {
