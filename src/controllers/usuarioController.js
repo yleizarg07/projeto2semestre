@@ -92,21 +92,26 @@ async function listarSocial(req, res) {
     });
 
     if (!usuario) {
-      return res
-        .status(404)
-        .render("pages/erro", { error: "Usuário não encontrado" });
+      return res.status(404).render("pages/erro", { error: "Usuário não encontrado" });
     }
-    const naoTemSocial =
-      !usuario.relacionamento &&
-      !usuario.aniversario &&
-      !usuario.idade &&
-      !usuario.interesses &&
-      !usuario.hobbies &&
-      !usuario.estilo &&
-      !usuario.animaisEstimacao &&
-      !usuario.paixoes &&
-      !usuario.humor;
 
+        const camposSociais = [
+      "relacionamento",
+      "aniversario",
+      "idade",
+      "interesses",
+      "hobbies",
+      "estilo",
+      "animaisEstimacao",
+      "paixoes",
+      "humor",
+    ];
+
+    //verifica se o campo não tem valor
+    const naoTemSocial = camposSociais.every((campo) => {
+      const v = usuario[campo];
+      return v === null || v === undefined || (typeof v === "string" && v.trim() === "");
+    });
     return res.render("pages/socialUsuario", {
       usuario,
       naoTemSocial,
@@ -115,11 +120,7 @@ async function listarSocial(req, res) {
   } catch (error) {
     //erro no servidor e render de página de erro
     console.error("Erro ao listar dados sociais:", error);
-    return res
-      .status(500)
-      .render("pages/erro", {
-        error: "Erro ao listar dados sociais: " + error.message,
-      });
+    return res.status(500).render("pages/erro", { error: "Erro ao listar dados sociais: " + error.message, });
   }
 }
 
@@ -130,16 +131,12 @@ async function criarUsuario(req, res) {
 
     //verfica se as os campos foram preenchidos
     if (!nome || !email || !nomeUsuario || !senha || !senha2) {
-      return res
-        .status(400)
-        .render("pages/cadastro", { error: "Preencha os campos necessarios" });
+      return res.status(400).render("pages/cadastro", { error: "Preencha os campos necessarios" });
     }
 
     //comnpara as senhas
     if (senha != senha2) {
-      return res
-        .status(400)
-        .render("pages/cadastro", { error: "As senhas são diferentes" });
+      return res.status(400).render("pages/cadastro", { error: "As senhas são diferentes" });
     }
 
     //hashedSenha é aversão criptografada da senha, a impressão digital
@@ -211,28 +208,36 @@ async function criarSocial(req, res) {
       paixoes,
       humor,
     };
-    //remove campos que não foram preenchidos
-    Object.keys(dados).forEach(
-      (k) => dados[k] === undefined && delete dados[k]
-    );
+
+    // remove campos não preenchidos (undefined, null ou string vazia)
+    Object.keys(dados).forEach((k) => {
+      const v = dados[k];
+      if (v === undefined || v === null) {
+        delete dados[k];
+        return;
+      }
+      if (typeof v === "string" && v.trim() === "") {
+        delete dados[k];
+        return;
+      }
+      if (k === "idade") {
+        const n = parseInt(v, 10);
+        if (Number.isNaN(n)) delete dados[k]; //number.isnan checa se o parseInt falhou
+        else dados[k] = n;
+      }
+    });
 
     //faz update no banco e verifica quantos registros foram afetados
     const [atualizados] = await UsuarioModel.update(dados, {
       where: { idUsuario },
     });
     if (!atualizados)
-      return res
-        .status(404)
-        .render("pages/erro", { error: "Usuário não encontrado" });
+      return res.status(404).render("pages/erro", { error: "Usuário não encontrado" });
 
     return res.status(200).redirect("/usuarios");
   } catch (error) {
     console.error("Erro ao criar social do usuário:", error);
-    return res
-      .status(500)
-      .render("pages/erro", {
-        error: "Erro ao criar social do usuário: " + error.message,
-      });
+    return res.status(500).render("pages/erro", {error: "Erro ao criar social do usuário: " + error.message, });
     }
 }
 
@@ -279,9 +284,22 @@ async function atualizarSocial(req, res) {
       humor,
     };
     //remove os campos indefinidos
-    Object.keys(dadosSociais).forEach(
-      (key) => dadosSociais[key] === undefined && delete dadosSociais[key]
-    );
+    Object.keys(dadosSociais).forEach((key) => {
+      const v = dadosSociais[key];
+      if (v === undefined || v === null) {
+        delete dadosSociais[key];
+        return;
+      }
+      if (typeof v === "string" && v.trim() === "") {
+        delete dadosSociais[key];
+        return;
+      }
+      if (key === "idade") {
+        const n = parseInt(v, 10);
+        if (Number.isNaN(n)) delete dadosSociais[key]; //number.isnan checa se o parseInt falhou
+        else dadosSociais[key] = n;
+      }
+    });
 
     //ao chamar o update ele retorna a quantidade de linhas atualizadas
     const [atualizados] = await UsuarioModel.update(dadosSociais, {
@@ -289,19 +307,13 @@ async function atualizarSocial(req, res) {
     });
     if (!atualizados) {
       //se nada foi atualizado ele retorna o erro 404
-      return res
-        .status(404)
-        .render("pages/erro", { error: "Usuário não encontrado" });
+      return res.status(404).render("pages/erro", { error: "Usuário não encontrado" });
     }
 
     return res.status(200).redirect("/usuarios");
   } catch (error) {
     console.error("Erro ao atualizar informações sociais:", error);
-    return res
-      .status(500)
-      .render("pages/erro", {
-        error: "Erro ao atualizar informações sociais: " + error.message,
-      });
+    return res.status(500).render("pages/erro", {error: "Erro ao atualizar informações sociais: " + error.message,});
   }
 }
 
@@ -312,13 +324,10 @@ async function login(req, res) {
 
     // busca usuário por email
     const usuarioEncontrado = await UsuarioModel.findOne({ where: { email } }); //findOne busca um unico registro no bd
+
     if (!usuarioEncontrado) {
       //404 é que o usuário não existe
-      return res
-        .status(404)
-        .render("pages/login", {
-          error: "Usuário não encontrado, faça seu cadastro",
-        });
+      return res.status(404).render("pages/login", {error: "Usuário não encontrado, faça seu cadastro", });
     }
 
     //compara senha enviada com o hash armazenado
@@ -326,10 +335,9 @@ async function login(req, res) {
       senha,
       usuarioEncontrado.senha
     ); //compara as senhas
+
     if (!senhaValida) {
-      return res
-        .status(401)
-        .render("pages/login", { error: "Senha incorreta" });
+      return res.status(401).render("pages/login", { error: "Senha incorreta" });
     }
 
     //grava id do usuário na sessão para autenticação em requisições futuras
@@ -353,18 +361,14 @@ async function logout(req, res) {
     return res.status(200).redirect("/");
   } catch (error) {
     console.error("Erro ao fazer logout:", error);
-    return res
-      .status(500)
-      .render("pages/erro", {
-        error: "Erro ao fazer logout: " + error.message,
-      });
+    return res.status(500).render("pages/erro", {error: "Erro ao fazer logout: " + error.message,});
   }
 }
 
 async function atualizarUsuario(req, res) {
   try {
     const { id } = req.params;
-    // nomes esperados do form: senhaAtual (atual), senha (nova), senha2 (confirma)
+
     const { nome, nomeUsuario, senha: senhaNova, senha2, senhaAtual } = req.body;
 
     // buscar usuário e garantir que traz o hash da senha
@@ -380,13 +384,13 @@ async function atualizarUsuario(req, res) {
       });
     }
 
-    // monta objeto com campos que sempre atualizamos
+    // monta objeto com campos que atualizamos
     const dadosAtualizados = {
       nome,
       nome_usuario: nomeUsuario,
     };
 
-    // Se o usuário NÃO quer mudar a senha -> atualiza só nome/nome_usuario
+    // Se o usuário não quer mudar a senha atualiza só nome/nome_usuario
 
      if (senhaAtual && !senhaNova) {
       return res.render("pages/editarUsuario", {
@@ -394,15 +398,15 @@ async function atualizarUsuario(req, res) {
         error: "Digite a nova senha para alterar.",
       });
     }
+
     if (!senhaNova || senhaNova.trim() === "") {
       await UsuarioModel.update(dadosAtualizados, {
         where: { idUsuario: parseInt(id, 10) },
       });
       return res.redirect("/usuarios");
     }
-    // A partir daqui: o usuário quer trocar a senha -> precisamos validar tudo
 
-    // 1) senhaAtual precisa existir no request
+    // senhaAtual precisa existir
     if (!senhaAtual || senhaAtual.trim() === "") {
       return res.render("pages/editarUsuario", {
         usuario,
@@ -410,7 +414,7 @@ async function atualizarUsuario(req, res) {
       });
     }
 
-    // 2) verificar senhaAtual comparando com o hash do DB (await obrigatório)
+    // verificar senhaAtual comparando com do banco de dados
     const senhaAtualValida = await bcrypt.compare(senhaAtual, usuario.senha);
     if (!senhaAtualValida) {
       return res.render("pages/editarUsuario", {
@@ -419,7 +423,7 @@ async function atualizarUsuario(req, res) {
       });
     }
 
-    // 3) confirmar nova senha
+    // confirmar nova senha
     if (!senha2 || senhaNova !== senha2) {
       return res.render("pages/editarUsuario", {
         usuario,
@@ -427,11 +431,11 @@ async function atualizarUsuario(req, res) {
       });
     }
 
-    // 4) só agora gerar o hash da nova senha E atribuir a dadosAtualizados
+    // só agora gera o hash da nova senha e atribuir aos dados atualizados
     const hashNova = await bcrypt.hash(senhaNova, 10);
     dadosAtualizados.senha = hashNova;
 
-    // 5) atualizar tudo de uma vez
+    // atualiza tudo de uma vez
     await UsuarioModel.update(dadosAtualizados, {
       where: { idUsuario: parseInt(id, 10) },
     });
@@ -454,9 +458,7 @@ async function removerUsuario(req, res) {
     const removidos = await UsuarioModel.destroy({ where: { idUsuario } }); //destroi registros com essa condição
 
     if (!removidos) {
-      return res
-        .status(404)
-        .render("pages/erro", { error: "Usuário não encontrado" });
+      return res.status(404).render("pages/erro", { error: "Usuário não encontrado" });
     }
 
     req.session.destroy(err => {
@@ -471,9 +473,7 @@ async function removerUsuario(req, res) {
 
   } catch (error) {
     console.error("Erro ao remover usuário:", error);
-    return res
-      .status(500)
-      .render("pages/erro", {
+    return res.status(500).render("pages/erro", {
         error: "Erro ao remover usuário: " + error.message,
       });
   }
@@ -527,9 +527,7 @@ async function buscarUsuarios(req, res) {
     return res.render("pages/buscaUsuarios", { usuarios, nome, error: null });
   } catch (error) {
     console.error("Erro na busca:", error);
-    return res
-      .status(500)
-      .render("pages/buscaUsuarios", {
+    return res.status(500).render("pages/buscaUsuarios", {
         usuarios: [],
         nome: "",
         error: "Erro ao buscar usuários.",
@@ -550,9 +548,7 @@ async function mostraEditarUsuario(req, res) {
     return res.render("pages/editarUsuario", { usuario });
   } catch (error) {
     console.error("Erro ao carregar edição de usuário:", error);
-    return res
-      .status(500)
-      .render("pages/erro", { error: "Erro ao carregar edição" });
+    return res.status(500).render("pages/erro", { error: "Erro ao carregar edição" });
   }
 }
 
