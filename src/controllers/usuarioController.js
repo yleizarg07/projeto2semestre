@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const UsuarioModel = require("../models/usuarioModel");
 const PostModel = require("../models/postModel");
 const { error } = require("console");
+const tamanho_senha_minimo = 8; //numero minimo da senha
 
 /*
  oq alguns termos são, para eu não esqucer
@@ -137,6 +138,11 @@ async function criarUsuario(req, res) {
     //comnpara as senhas
     if (senha != senha2) {
       return res.status(400).render("pages/cadastro", { error: "As senhas são diferentes" });
+    }
+
+    //verifica o tamanho minimo da senha
+    if ((senha || "").trim().length < tamanho_senha_minimo) {
+      return res.status(400).render("pages/cadastro", { error: "A senha deve ter pelo menos 8 caracteres." });
     }
 
     //hashedSenha é aversão criptografada da senha, a impressão digital
@@ -428,6 +434,14 @@ async function atualizarUsuario(req, res) {
       return res.render("pages/editarUsuario", {
         usuario,
         error: "A confirmação da nova senha não corresponde.",
+      });
+    }
+
+    //verifica o tamanho minimo da nova senha
+    if ((senhaNova || "").trim().length < tamanho_senha_minimo) {
+      return res.render("pages/editarUsuario", {
+        usuario,
+        error: "A nova senha deve ter pelo menos 8 caracteres.",
       });
     }
 
