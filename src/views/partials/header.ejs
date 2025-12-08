@@ -1,58 +1,69 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
   <div class="container">
-    <a class="navbar-brand d-flex align-items-center" href="/">
-    <img 
-      src="/images/logo.jpg" 
-      alt="Logo" 
-      width="60" 
-      height="60" 
-      class="rounded-circle me-2"
-      style='border-radius: 50%;
-      border: 2px solid #fff;
-      box-shadow: 0 1px 6px #5d4a40;'
-    >
-    <span class="fs-3 fw-bold" 
-      style="background: linear-gradient(90deg, #472518, #b98c78); 
-              background-clip: text;
-             -webkit-background-clip: text;
-             color: transparent;">
-  Lontraloop
-</span>
-  </a>
 
-   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-      <span class="navbar-toggler-icon"></span>
+    <a class="navbar-brand d-flex align-items-center" href="/">
+      <img 
+        src="/images/logo.jpg" 
+        alt="Logo" 
+        width="60" 
+        height="60" 
+        class="logo rounded-circle me-2"
+      >
+
+      <span class="navbar-titulo fs-3 fw-bold">
+        Lontraloop
+      </span>
+    </a>
+
+    <button class="navbar-toggler" 
+        type="button" 
+        data-bs-toggle="collapse" 
+        data-bs-target="#navbarSupportedContent" 
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-    <li class="nav-item"><a class="nav-link" href="/">Início</a></li>
 
-    <li class="nav-item"><a class="nav-link" href="/posts/criar">Criar Post</a></li>
-  
-  <% if (session && session.idUsuario) { %>
-      <li class="nav-item"><a class="nav-link" href="/usuarios/logout">Logout</a></li>
-      <li class="nav-item"><a href="/usuarios/editar" class="nav-link">Editar Perfil</a></li>
-    <% } %>
-  </ul>
-  <div class="d-flex align-items-center">
-    
-    <form class="d-flex me-2" role="search" action="/usuarios/buscar" method="GET">
-      <input class="form-control me-2" type="search" placeholder="Buscar usuários" aria-label="Buscar usuários" name="nome"/>
-      <button class="btn btn-outline-success" type="submit">Buscar</button>
-    </form>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="/">Início</a></li>
+        <li class="nav-item"><a class="nav-link" href="/posts/criar">Criar Post</a></li>
 
-    <% if (session && session.idUsuario) { %>
-      <!-- aqui poderia ter link pro perfil real -->
-      <a href="/usuarios/listar/social"><img src="/images/perfil.jpg" alt="avatar" width="45" class="rounded-circle me-2" style='border-radius: 50%;
-      border: 2px solid #fff;
-      box-shadow: 0 1px 6px #5d4a40;'></a>
-    <% } else { %>
-      <a href="/usuarios/login"><img src="/images/anonimo.jpg" alt="avatar" width="45" class="rounded-circle me-2" style='border-radius: 50%;
-      border: 2px solid #fff;
-      box-shadow: 0 1px 6px #5d4a40;'></a>
-    <% } %>
-  
-</div>
-</div>
+        <% if (session && session.idUsuario) { %>
+          <li class="nav-item"><a class="nav-link" href="/usuarios/logout">Logout</a></li>
+          <li class="nav-item"><a href="/usuarios/editar" class="nav-link">Editar Perfil</a></li>
+        <% } %>
+      </ul>
+
+      <div class="d-flex align-items-center">
+
+        <form class="d-flex me-2" role="search" action="/usuarios/buscar" method="GET">
+          <input class="form-control me-2" type="search" placeholder="Buscar usuários" aria-label="Buscar usuários" name="nome"/>
+          <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
+
+        <% if (session && session.idUsuario) { %>
+          <a href="/usuarios/listar/social">
+            <img 
+              src="/images/perfil.jpg" 
+              alt="avatar" 
+              width="45" 
+              class="logo rounded-circle me-2"
+            >
+          </a>
+        <% } else { %>
+          <a href="/usuarios/login">
+            <img 
+              src="/images/anonimo.jpg" 
+              alt="avatar" 
+              width="45" 
+              class="logo rounded-circle me-2"
+            >
+          </a>
+        <% } %>
+      </div>
+    </div>
+  </div>
 </nav>

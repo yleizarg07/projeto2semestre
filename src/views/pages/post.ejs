@@ -1,115 +1,83 @@
 <%- include('../partials/head') %> 
 <%- include('../partials/header') %>
 
-<div class="container mt-5">
+<div class="container post-container">
 
-    <!-- POSTAGEM -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <div class="d-flex align-items-center mb-2">
-            <img src="/images/perfil.jpg" width="48" class="rounded-circle me-3">
-            <div>
+<div class="card interacao-card">
+    <div class="card-body">
+        <div class="d-flex align-items-center mb-2">
+            <img src="/images/perfil.jpg" class="usuario-img me-3">
+             <div>
                 <strong>@<%= usuario.nome_usuario %></strong><br>
                 <small class="text-muted"><%= postagem.categoria || 'Geral' %></small>
             </div>
-            </div>
-            <h3 class="card-title"><%= postagem.titulo %></h3>
-
-            <p class="card-text"><%= postagem.conteudo %></p>
-
-            <a href="/posts" class="btn btn-outline-secondary mt-3">
-                Voltar
-            </a>
         </div>
+            <h3 class="perfil-titulo"><%= postagem.titulo %></h3>
+
+            <p class="post-texto"><%= postagem.conteudo %></p>
+
+            <a href="/posts" class="btn btn-outline-secondary voltar-btn">
+                Voltar</a>
+    </div>
+</div>
+
+<div class="card interacao-card">
+    <div class="card-header comentario-header">
+        <h5 class="mb-0">Comentar</h5>
     </div>
 
-    <!-- FORMULÁRIO DE COMENTÁRIO -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Comentar</h5>
+    <div class="card-body">
+        <form action="/comentarios/criar" method="POST">
+            <input type="hidden" name="idPost" value="<%= postagem.idPost %>">
+            <textarea 
+                name="conteudo" 
+                class="form-control" 
+                rows="3" 
+                placeholder="Escreva seu comentário..."
+                required
+            ></textarea>
+
+            <button class="btn btn-primary enviar-comentario-btn">Enviar comentário</button>
+        </form>
+    </div>
+</div>
+
+    <div class="card lista-comentarios">
+        <div class="card-header comentarios-header">
+            <h5 class="mb-0">Comentários</h5>
         </div>
 
         <div class="card-body">
-            <form action="/comentarios/criar" method="POST">
-                <input type="hidden" name="idPost" value="<%= postagem.idPost %>">
+        <% if (comentarios && comentarios.length > 0) { %>
+            <% comentarios.forEach(c => { %>
+                <div class="comentario-item">
+                    <img src="/images/perfil.jpg"
+                        class="usuario-img me-3">
 
-                <textarea 
-                    name="conteudo" 
-                    class="form-control" 
-                    rows="3" 
-                    placeholder="Escreva seu comentário..."
-                    required
-                ></textarea>
+                    <div class="flex-grow-1">
+                        <strong>@<%= c.nomeUsuario %></strong>
+                        <p class="mb-1"><%= c.conteudo %></p>
+                    </div>
 
-                <button class="btn btn-primary mt-3">Enviar comentário</button>
-            </form>
-        </div>
-    </div>
+                    <% if (session && session.idUsuario === c.idUsuario) { %>
+                    <div class="comentario-botoes">
+                        <a href="/comentarios/editar/<%= c.idComentario %>" 
+                            class="btn btn-sm btn-warning">Editar</a>
 
-    <!-- LISTA DE COMENTÁRIOS -->
-<div class="card shadow-sm">
-    <div class="card-header bg-secondary text-white">
-        <h5 class="mb-0">Comentários</h5>
-    </div>
-
-<div class="card-body">
-
-<% if (comentarios && comentarios.length > 0) { %>
-
-    <% comentarios.forEach(c => { %>
-
-        <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
-
-            <!-- FOTO DO USUÁRIO -->
-            <img 
-                src="/images/perfil.jpg"
-                class="rounded-circle me-3"
-                width="50"
-                height="50"
-
-            >
-
-<!-- COLUNA DO COMENTÁRIO -->
-        <div class="flex-grow-1">
-            <strong>@<%= c.nomeUsuario %></strong>
-            <p class="mb-1"><%= c.conteudo %></p>
-        </div>
-
-        <!-- BOTÃO EXCLUIR (somente para o dono do comentário) -->
-        <% if (session && session.idUsuario === c.idUsuario) { %>
-        <div class="ms-3 d-flex gap-2">
-
-                <!-- EDITAR -->
-                <a 
-                    href="/comentarios/editar/<%= c.idComentario %>" 
-                    class="btn btn-sm btn-warning"
-                >
-                    Editar
-                </a>
-
-                <!-- EXCLUIR -->
-                <form 
-                    action="/comentarios/excluir/<%= c.idComentario %>" method="POST">
-                    <button class="btn btn-sm btn-danger">
-                        Excluir
-                    </button>
-                </form>
-
+                        <form action="/comentarios/excluir/<%= c.idComentario %>" method="POST">
+                            <button class="btn btn-sm btn-danger">Excluir</button>
+                        </form>
+                </div>
+                <% } %>
             </div>
+        <% }) %>
 
+        <% } else { %>
+            <p class="text-muted">Nenhum comentário ainda. Seja o primeiro!</p>
         <% } %>
 
+        </div>
     </div>
-
-<% }) %>
-    <% } else { %>
-        <p class="text-muted">Nenhum comentário ainda. Seja o primeiro!</p>
-    <% } %>
-
-    </div>
-</div> 
-
 </div>
 
 <%- include('../partials/footer') %>
-

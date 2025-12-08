@@ -1,8 +1,8 @@
 <%- include('../partials/head') %>
 <%- include('../partials/header') %>
 
-<div class="container cadastro-container">
-    <div class="card cadastro-card shadow p-4">
+<div class="container autenticacao-container">
+    <div class="card autenticacao-card shadow p-4">
 
     <% if (error) { %>
     <div class="alert alert-danger"><%= error %></div>
@@ -10,7 +10,7 @@
 
     <div class="text-center mb-3">
         <img src="/images/logo.jpg" alt="logo" width="80" class="rounded-circle mb-2">
-        <h3 class="fw-bold cadastro-titulo">Cadastro</h3>
+        <h3 class="fw-bold autenticacao-titulo">Cadastro</h3>
     </div>
 
     <form action="/usuarios/criar" method="POST">
@@ -36,12 +36,11 @@
 
             <input 
                 type="password" 
-                class="form-control cadastro-input"
+                class="form-control autenticacao-senha"
                 name="senha" 
                 id="senha" 
-                required
-            >
-
+                required>
+                
             <i class="bi bi-eye-slash icon-senha" id="toggleSenha"></i>
         </div>
 
@@ -51,11 +50,10 @@
 
             <input 
                 type="password" 
-                class="form-control cadastro-input"
+                class="form-control autenticacao-senha"
                 name="senha2" 
                 id="senha2" 
-                required
-            >
+                required>
 
             <i class="bi bi-eye-slash icon-senha" id="toggleSenha2"></i>
         </div>

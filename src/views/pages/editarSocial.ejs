@@ -11,7 +11,6 @@
 
     <form action="/usuarios/social/atualizar/<%= usuario.idUsuario %>" method="POST">
 
-        <!-- Relacionamento -->
         <div class="mb-3">
             <label class="form-label">Relacionamento</label>
             <select class="form-select" name="relacionamento">
@@ -23,49 +22,41 @@
             </select>
         </div>
 
-        <!-- Aniversário -->
         <div class="mb-3">
             <label class="form-label">Aniversário</label>
             <input type="date" class="form-control" name="aniversario" value="<%= usuario.aniversario || '' %>">
         </div>
 
-        <!-- Idade -->
         <div class="mb-3">
             <label class="form-label">Idade</label>
             <input type="number" class="form-control" name="idade" value="<%= usuario.idade || '' %>" min="1">
         </div>
 
-        <!-- Interesses -->
         <div class="mb-3">
             <label class="form-label">Interesses</label>
             <textarea class="form-control" name="interesses" rows="2"><%= usuario.interesses || '' %></textarea>
         </div>
 
-        <!-- Hobbies -->
         <div class="mb-3">
             <label class="form-label">Hobbies</label>
             <textarea class="form-control" name="hobbies" rows="2"><%= usuario.hobbies || '' %></textarea>
         </div>
 
-        <!-- Estilo -->
         <div class="mb-3">
             <label class="form-label">Estilo</label>
             <input type="text" class="form-control" name="estilo" value="<%= usuario.estilo || '' %>">
         </div>
 
-        <!-- Animais de Estimação -->
         <div class="mb-3">
             <label class="form-label">Animais de Estimação</label>
             <input type="text" class="form-control" name="animaisEstimacao" value="<%= usuario.animaisEstimacao || '' %>">
         </div>
 
-        <!-- Paixões -->
         <div class="mb-3">
             <label class="form-label">Paixões</label>
             <textarea class="form-control" name="paixoes" rows="2"><%= usuario.paixoes || '' %></textarea>
         </div>
 
-        <!-- Humor -->
         <div class="mb-3">
             <label class="form-label">Humor</label>
             <input type="text" class="form-control" name="humor" value="<%= usuario.humor || '' %>">

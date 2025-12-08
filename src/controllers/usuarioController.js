@@ -182,21 +182,6 @@ async function criarSocial(req, res) {
       humor,
     } = req.body; //requere as informações enviadas pelo usuario
     //verifica se todos os campos foram preenchidos
-    if (
-      !relacionamento ||
-      !aniversario ||
-      !idade ||
-      !interesses ||
-      !hobbies ||
-      !estilo ||
-      !animaisEstimacao ||
-      !paixoes ||
-      !humor
-    ) {
-      return res.status(400).render("pages/erro", {
-        error: "Por favor, preencha todos os campos antes de continuar."
-      });
-    }
 
     //pega id do usuário da sessão
     const idUsuario = req.session.idUsuario;
@@ -263,15 +248,15 @@ async function atualizarSocial(req, res) {
     } = req.body; //dados do formulário
 
     if (
-      !relacionamento &&
-      !aniversario &&
-      !idade &&
-      !interesses &&
-      !hobbies &&
-      !estilo &&
-      !animaisEstimacao &&
-      !paixoes &&
-      !humor
+      !relacionamento === undefined &&
+      !aniversario === undefined &&
+      !idade === undefined &&
+      !interesses   === undefined &&
+      !hobbies === undefined &&
+      !estilo === undefined &&
+      !animaisEstimacao === undefined &&
+      !paixoes === undefined &&
+      !humor === undefined
     ) {
       return res.status(400).render("pages/erro", {
         error: "Por favor, preencha ao menos um campo para atualizar."
@@ -293,17 +278,18 @@ async function atualizarSocial(req, res) {
     Object.keys(dadosSociais).forEach((key) => {
       const v = dadosSociais[key];
       if (v === undefined || v === null) {
-        delete dadosSociais[key];
+        dadosSociais[key] = null;
         return;
       }
       if (typeof v === "string" && v.trim() === "") {
-        delete dadosSociais[key];
+        dadosSociais[key] = null;
         return;
       }
       if (key === "idade") {
         const n = parseInt(v, 10);
-        if (Number.isNaN(n)) delete dadosSociais[key]; //number.isnan checa se o parseInt falhou
-        else dadosSociais[key] = n;
+        dadosSociais[key] = Number.isNaN(n) ? null : n;
+         //number.isnan checa se o parseInt falhou
+        
       }
     });
 
@@ -312,9 +298,12 @@ async function atualizarSocial(req, res) {
       where: { idUsuario: parseInt(id) },
     });
     if (!atualizados) {
-      //se nada foi atualizado ele retorna o erro 404
-      return res.status(404).render("pages/erro", { error: "Usuário não encontrado" });
+      const usuarioExistente = await UsuarioModel.findByPk(id);
+      if (!usuarioExistente) {
+        return res.status(404).render("pages/erro", { error: "Usuário não encontrado" });
+      }
     }
+      //se nada foi atualizado ele retorna o erro 404
 
     return res.status(200).redirect("/usuarios");
   } catch (error) {

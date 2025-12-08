@@ -1,18 +1,18 @@
 <%- include('../partials/head') %>
 <%- include('../partials/header') %>
 
-<div class="container mt-4">
+<div class="container container-medio">
 
-    <h2 class="mb-4">Informações Sociais</h2>
+    <h2 class="page-title">Informações Sociais</h2>
 
     <% if (naoTemSocial) { %>
 
-        <p>Você ainda não cadastrou suas informações pessoais.</p>
+        <p class="perfil-vazio">Você ainda não cadastrou suas informações pessoais.</p>
         <a href="/usuarios/social/criar" class="btn btn-primary">Criar Informações</a>
 
     <% } else { %>
 
-        <ul class="list-group mb-4">
+        <ul class="list-group social-lista">
             <li class="list-group-item"><strong>Relacionamento:</strong> <%= usuario.relacionamento %></li>
             <li class="list-group-item"><strong>Aniversário:</strong> <%= usuario.aniversario || "-" %></li>
             <li class="list-group-item"><strong>Idade:</strong> <%= usuario.idade || "-" %></li>
@@ -23,11 +23,13 @@
             <li class="list-group-item"><strong>Paixões:</strong> <%= usuario.paixoes %></li>
             <li class="list-group-item"><strong>Humor:</strong> <%= usuario.humor %></li>
         </ul>
-        <div class="d-flex">
-        <a href="/usuarios/social/editar/<%= usuario.idUsuario %>" class="btn btn-warning">Editar Informações</a>
-        <a href="/usuarios/social/remover/<%= usuario.idUsuario %>" class="btn btn-danger ms-2">Remover Informações</a>
-        <a href="/usuarios" class="btn btn-secondary ms-2">Voltar</a>
+
+        <div class="botoes-acao">
+            <a href="/usuarios/social/editar/<%= usuario.idUsuario %>" class="btn btn-warning">Editar Informações</a>
+            <a href="/usuarios/social/remover/<%= usuario.idUsuario %>" class="btn btn-danger">Remover Informações</a>
+            <a href="/usuarios" class="btn btn-secondary">Voltar</a>
         </div>
+
     <% } %>
 </div>
 

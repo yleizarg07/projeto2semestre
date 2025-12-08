@@ -1,4 +1,5 @@
-.footer-fixo {
+/*footer*/
+.footer {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -10,8 +11,31 @@
   box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
   z-index: 999;
 }
+/*sidebar*/
+.titulo-usuarios {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: linear-gradient(130deg, #472518, #eed1b7);
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 15px;
+}
+/*header*/
+.logo {
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 6px #5d4a40;
+}
 
-/* Container centralizado */
+.navbar-titulo {
+    background: linear-gradient(90deg, #472518, #b98c78);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* erro */
 .erro-container {
     min-height: 70vh;
     display: flex;
@@ -19,7 +43,6 @@
     align-items: center;
 }
 
-/* Card de erro */
 .erro-card {
     max-width: 500px;
     width: 100%;
@@ -29,27 +52,24 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Ícone */
 .erro-icone i {
     font-size: 3rem;
-    color: #ffc107; /* text-warning */
+    color: #ffc107; 
 }
 
-/* Título */
 .erro-titulo {
     margin-bottom: 1rem;
-    color: #dc3545; /* text-danger */
+    color: #dc3545;
     font-weight: bold;
 }
 
-/* Mensagem de erro */
 .erro-mensagem {
     font-size: 1.1rem;
-    color: #6c757d; /* text-muted */
+    color: #6c757d;
     margin-bottom: 1.5rem;
 }
 
-/* Estilos da página de buscaUsuario*/
+/*buscaUsuario*/
 
 .busca-usuario-container h3 {
     font-weight: bold;
@@ -89,33 +109,31 @@
     color: #6c757d;
 }
 
-/*Estilos da página de Cadastro*/
+/*Cadastro e login*/
 
-.cadastro-container {
+.autenticacao-container {
     min-height: 75vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-top: 25px;
+    margin-bottom: 5px;
 }
 
-.cadastro-card {
+.autenticacao-card {
     max-width: 400px;
     width: 100%;
     border-radius: 15px;
 }
 
-.cadastro-titulo {
+.autenticacao-titulo {
     color: #b98c78;
 }
 
-/* Inputs com espaço para ícone */
-.cadastro-input {
+.autenticacao-senha {
     padding-right: 40px !important;
 }
 
-/* Ícone olho de senha */
 .icon-senha {
     position: absolute;
     top: 70%;
@@ -130,7 +148,7 @@
     color: #000;
 }
 
-/*Estilos da página Criar Postagem e Editar Postagem*/
+/*Criar Postagem e Editar Postagem*/
 
 .post-container {
     max-width: 800px;
@@ -160,9 +178,7 @@
     margin-left: 10px;
 }
 
-/* ================================
-   Estilos da página Editar Social
-   ================================ */
+/*Editar Social */
 
 .editar-social-container {
     max-width: 750px;
@@ -188,25 +204,162 @@
     min-width: 120px;
 }
 
-/* Container */
-.editar-usuario-container {
+/* Container para editar usuário, criar social e editar comentario */
+.container-medio {
     max-width: 700px;
+    margin: 40px auto;
 }
 
-/* Campo com ícone ao lado */
+/* Campo com ícone ao lado (importante para editar usuario)*/
 .input-icon-container input {
     padding-right: 40px !important;
 }
+/*Feed index */
+.container-feed {
+    max-width: 1100px;
+}
 
-/* Ícone de mostrar/esconder senha */
-.toggle-icon {
-    position: absolute;
-    top: 70%;
-    right: 10px;
-    transform: translateY(-50%);
-    cursor: pointer;
+/* perfilSocialOutro*/
+
+.perfil-container {
+    margin-top: 40px;
+    max-width: 800px;
+}
+
+.perfil-titulo {
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.perfil-vazio {
+    font-size: 1.1rem;
+    margin-top: 20px;
+}
+
+.perfil-lista .list-group-item {
+    padding: 12px 18px;
+    font-size: 1rem;
+}
+
+.voltar-btn {
+    margin-top: 25px;
+}
+
+/*Postagem*/
+
+.interacao-card { /*usado em comentario e post*/
+    margin-bottom: 25px;
+}
+
+.usuario-img { /*usado em comentario e post*/
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}
+
+.post-title {
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.post-texto {
+    margin-top: 10px;
+    font-size: 1.05rem;
+}
+
+/* Formulário de comentário */
+
+.comentario-header {
+    background: #0d6efd;
+    color: white;
+}
+
+.enviar-comentario-btn {
+    margin-top: 15px;
+}
+
+.lista-comentarios {
+    margin-bottom: 40px;
+}
+
+.comentarios-header {
+    background: #6c757d;
+    color: white;
+}
+
+.comentario-item {
+    display: flex;
+    align-items: start;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.comentario-botoes {
+    display: flex;
+    gap: 10px;
+    margin-left: 10px;
+}
+
+/*Social usuario*/
+
+.social-lista {
+    margin-bottom: 25px;
+    border-radius: 8px;
+}
+
+.botoes-acao {
+    display: flex;
+    gap: 12px;
+}
+
+/*Usuários*/
+
+.usuarios-container {
+    max-width: 850px;
+    margin-top: 50px;
+}
+
+.usuarios-header hr {
+    width: 60%;
+    margin: 10px auto;
+    opacity: 0.3;
+}
+
+.usuarios-list {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.usuario-item {
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+}
+
+.usuario-data {
+    display: flex;
+    align-items: center;
+}
+
+.usuario-foto {
+    margin-right: 12px;
+    border: 2px solid #ddd;
+}
+
+.usuario-nome {
     font-size: 1.2rem;
+}
+
+.usuario-username {
+    font-size: 0.9rem;
     color: #6c757d;
 }
 
+.usuario-ver {
+    display: flex;
+    align-items: center;
+}
 
+.usuarios-alert {
+    margin-top: 30px;
+}

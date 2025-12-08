@@ -1,11 +1,10 @@
 <div class="card p-3 mb-3">
-<h4 style="color: #b98c78; text-shadow: 1px 1px 2px rgb(0, 0, 0);">Usuários</h4>
+<h4 class="titulo-usuarios">Usuários</h4>
 
 <% if (usuarios && usuarios.length) { %>
 <% usuarios.slice(0, 5).forEach(u => { %>
 <div class="d-flex align-items-center mb-2">
 
-    <!-- Avatar padrão-->
 <img src="/images/perfil.jpg" alt="avatar" width="40" class="rounded-circle me-2">
 <a href="/usuarios?nomeUsuario=<%= u.nome_usuario %>"><%= u.nome %></a>
 </div>

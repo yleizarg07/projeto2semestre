@@ -1,7 +1,7 @@
 <%- include('../partials/head') %>
 <%- include('../partials/header') %>
 
-<div class="container mt-5 editar-usuario-container">
+<div class="container mt-5 container-medio">
 
     <h2>Editar Informações do Usuário</h2>
 
@@ -25,7 +25,6 @@
                    value="<%= usuario.nome_usuario %>" required>
         </div>
 
-        <!-- Senha atual -->
         <div class="mb-3 position-relative input-icon-container">
             <label for="senhaAtual" class="form-label">Senha Atual</label>
 
@@ -37,10 +36,9 @@
                 placeholder="Digite sua senha atual"
             >
 
-            <i class="bi bi-eye-slash toggle-icon" id="toggleSenhaAtual"></i>
+            <i class="bi bi-eye-slash icon-senha" id="toggleSenhaAtual"></i>
         </div>
 
-        <!-- Nova senha -->
         <div class="mb-3 position-relative input-icon-container">
             <label for="senha" class="form-label">Nova Senha</label>
 
@@ -52,10 +50,9 @@
                 placeholder="Digite a nova senha"
             >
 
-            <i class="bi bi-eye-slash toggle-icon" id="toggleSenha"></i>
+            <i class="bi bi-eye-slash icon-senha" id="toggleSenha"></i>
         </div>
 
-        <!-- Confirmar senha -->
         <div class="mb-3 position-relative input-icon-container">
             <label for="senha2" class="form-label fw-semibold">Confirme sua Senha</label>
 
@@ -66,7 +63,7 @@
                 name="senha2"
             >
 
-            <i class="bi bi-eye-slash toggle-icon" id="toggleSenha2"></i>
+            <i class="bi bi-eye-slash icon-senha" id="toggleSenha2"></i>
         </div>
 
         <button type="submit" class="btn btn-primary">Salvar alterações</button>
